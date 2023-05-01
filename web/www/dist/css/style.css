@@ -1446,19 +1446,6 @@ img.emoji  {
 .bubble_media_player  {
     width: auto !important;
 }
-.bonzi_status  {
-    position: absolute;
-    border-style: solid;
-    border-width: 4px 12px 4px 0;
-    border-radius: 7px;
-    border: #000000 solid 1px;
-    padding: 4px;
-    background: #ffffe1;
-    font-size: 12px;
-    color: #000;
-    top: -22px;
-    width: max-content;
-}
 #themes_icon  {
     color: rgba(255, 255, 255, 0.5);
     font-weight: bold;
