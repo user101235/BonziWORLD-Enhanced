@@ -3,9 +3,8 @@
         "public": {
             "char_limit": 2500,
             "name_limit": 25,
-            "status_limit": 36,
-                "godword": null,
-                "runlevel": {
+            "godword": null,
+            "runlevel": {
                 "godmode": 0,
                 "youtube": 0,
                 "soundcloud": 0,
@@ -65,14 +64,13 @@
 				"min": 125,
 				"default": "random"
 			},
-			"defaultName": "Anonymous",
+			"defaultName": "Anonymous"
 		},
         "private": {
             "char_limit": 5000,
             "name_limit": 25,
-            "status_limit": 36,
-                "godword": null,
-                "runlevel": {
+            "godword": null,
+            "runlevel": {
                 "godmode": 0,
                 "youtube": 0,
                 "soundcloud": 0,
@@ -132,7 +130,7 @@
 				"min": 50,
 				"default": "random"
 			},
-			"defaultName": "Anonymous",
+			"defaultName": "Anonymous"
 		}
 	},
 	"consoleOutput": true,
