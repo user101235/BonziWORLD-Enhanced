@@ -809,30 +809,6 @@ let userCommands = {
         this.public.name = this.private.sanitize ? sanitize(name) : name;
         this.room.updateUser(this);
     },
-    "status": function() {
-        let argsString = Utils.argsString(arguments);
-        if (argsString.length > this.room.prefs.status_limit)
-            return;
-        if (argsString.includes("{COLOR}")) {
-            argsString = this.public.color;
-        }
-        if (argsString.includes("{NAME}")) {
-            argsString = sanitizeHTML2(this.public.name);
-        }
-        if (argsString.includes("{ROOM}")) {
-            argsString = sanitizeHTML2(this.room.rid.slice(0,16));
-        }
-        if (argsString.includes("\"")) {
-            return;
-        }
-        if (argsString.includes("'")) {
-            return;
-        }
-
-        let status = argsString;
-        this.public.status = this.private.sanitize ? sanitize(status) : status;
-        this.room.updateUser(this);
-    },
     broadcast: function (...text) {
         if (this.private.runlevel < 3) {
             this.socket.emit("alert", "This command requires administrator privileges");
