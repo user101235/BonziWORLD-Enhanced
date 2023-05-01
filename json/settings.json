@@ -64,7 +64,7 @@
 				"min": 125,
 				"default": "random"
 			},
-			"defaultName": "Anonymous",
+			"defaultName": "Anonymous"
 		},
         "private": {
             "char_limit": 5000,
@@ -130,7 +130,7 @@
 				"min": 50,
 				"default": "random"
 			},
-			"defaultName": "Anonymous",
+			"defaultName": "Anonymous"
 		}
 	},
 	"consoleOutput": true,
