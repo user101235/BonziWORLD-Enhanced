@@ -253,7 +253,8 @@ var Bonzi = (function () {
 														bonziAlert("This person hasnt speaked yet")
 														return;
 													}
-													$("#chat_message").val("--quote--<br><blockquote data-style=quote>" + _this2.last + "</blockquote> ").focus()
+													socket.emit("talk", {text: "--quote--<br><blockquote>" + _this2.last + "</blockquote>"});
+													//$("#chat_message").val("--quote--<br><blockquote>" + _this2.last + "</blockquote> ").focus()
 												}
 											},
 										},
@@ -443,6 +444,7 @@ var Bonzi = (function () {
                 {
                     key: "updateText",
                     value: function () {
+                        if ($("div.bubble p.bubble-content").find("blockquote").length > 0){$("p.bubble-content blockquote").addClass("quote")}
                         0 === this.event.timer && (this.$dialog.css("display", "block"), (this.event.timer = 1), this.talk(this.event.cur().text, this.event.cur().say, !0)), "none" == this.$dialog.css("display") && this.eventNext();
                     },
                 },
