@@ -33,6 +33,13 @@ body, html  {
 .rainbow {
     animation:rainbow 2s linear infinite
 }
+
+.quote {
+    border-left: 3px solid grey;
+    display:block;
+    padding-left:3px
+}
+
 [data-style*="border"] {
     border: 1px solid black;
 }
