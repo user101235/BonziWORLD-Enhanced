@@ -1588,7 +1588,7 @@ function bzSetup() {
         }),
         socket.on("backflip", function (data) {
         	var b = bonzis[data.guid];
-        	b.cancel(), b.backflip(data.swag, data.swag, data.sad, data.earth, data.praise, data.wave, data.shrug, data.think, data.clap, data.grin);
+        	b.cancel(), b.backflip(data.swag);
         }),
         socket.on("clap", function (data) {
         	var b = bonzis[data.guid];
