@@ -1,5 +1,3 @@
-// Code by ItzCrazyScout, CosmicStar98 and 'HOST'
-// Private :-)
 const log = require("./log.js").log;
 const Ban = require("./ban.js");
 const Utils = require("./utils.js");
@@ -559,11 +557,6 @@ let userCommands = {
                 guid: this.guid,
        });
     },
-    "wave": function () {
-        this.room.emit("wave", {
-            guid: this.guid,
-        });
-    },
     "shrug": function () {
         this.room.emit("shrug", {
             guid: this.guid,
@@ -574,12 +567,6 @@ let userCommands = {
             guid: this.guid,
         });
     },
-    "backflip": function(swag) {
-        this.room.emit("backflip", {
-            guid: this.guid,
-            swag: swag == "swag",
-        });
-    },
     "sad": function() {
         this.room.emit("sad", {
             guid: this.guid,
@@ -588,6 +575,12 @@ let userCommands = {
     "think": function() {
         this.room.emit("think", {
             guid: this.guid,
+        });
+    },
+    "backflip": function(swag) {
+        this.room.emit("backflip", {
+            guid: this.guid,
+            swag: swag == "swag",
         });
     },
     toppestjej: function () {
