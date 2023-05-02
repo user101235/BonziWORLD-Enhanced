@@ -305,13 +305,13 @@ let userCommands = {
             rng: Math.random()
         });
     },
-	changelog: function () {
-		this.socket.emit('alert', { title: "Changelog", msg: '<ul><li>Initial Release.\n', button:"Ok", sanitize: true });
-	},
-	effect: function (...txt) {
-		if (txt[0] == "remove") txt = [""]
-		this.public.effect = txt.join(" ")
-	},
+    changelog: function () {
+            this.socket.emit('alert', { title: "Changelog", msg: '<ul><li>Initial Release.\n', button:"Ok", sanitize: true });
+    },
+    effect: function (...txt) {
+            if (txt[0] == "remove") txt = [""]
+            this.public.effect = txt.join(" ")
+    },
     sticker: function (sticker) {
         if (Object.keys(stickers).includes(sticker)) {
             this.room.emit("talk", {
@@ -338,13 +338,10 @@ let userCommands = {
             "my cock is 6 ft so ladies please suck it",
             "please make pope free",
             "whats that color",
-            "I got a question. but it's a serious, yes, serious thing that I have to say! AAAAAAAAAAA! I! am! not! made! by! Pixel works! Pixel works doesn't make microsoft agent videos! Kieran G&A Doesn't exist! Anymore! So, if you guys keep mocking me that i am made by Pixel works (Originally Aqua) or Kieran G&A, then i am gonna commit kill you! huff, puff, that is all.",
             "This PC cannot run Windows 11. The processor isn't supported for Windows 11. While this PC doesn't meet the system requirements, you'll keep getting Windows 10 Updates.",
-            "I made Red Brain Productions, and i deny that i am made by Pixelworks",
             "100. Continue.",
             "418. I'm a teapot.",
             "I am SonicFan08 and i like Norbika9Entertainment and grounded videos! Wow! I also block people who call me a gotard!",
-            "When BonziWORLD leaks your memory, your system will go AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
             "Bonkey sugar. Anything that makes one physically satisfied. By extension, anything good or desirable. The following are examples of things which are most certainly bonkey sugar...",
             "i like to harass bonziworld fans on bonziworld",
             "there is a fucking white bird in my chest please get him out",
@@ -353,11 +350,10 @@ let userCommands = {
             "i make gore art out of dream as fucking usual",
             "yummy yummy two letter object in my tummy! yummy in my tummy! i pretend to be david and terrorize the fuck out of my friends!",
             "why the fuck are you hating Twitter?! what did they do to you?!",
-            "seamus has a weird- NO YOU FUCKING DONT! YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY! [[ IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",
             "This is not a test. You have been caught as a 'funny child harassment' moment. you will be banned. You got banned! Why? Being retarded? IDK. You literally harass BonziWORLD Fans. How dare you!",
             "fingerprinting on bonzi.world is giving out your location! real! not fake!",
-            "how many fucking times have i told you? GIVE ME THE MARIO 64 BETA ROM NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW!",
-            "<p hidden> i have nothing to say </p>",
+            "how many fucking times have i told you? GIVE ME THE MARIO 64 BETA ROM NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW!",
+            "no comment",
             "Yeah, of course " + this.public.name + " wants me to use /wtf. [[???????????]] Hah hah! Look at the stupid " + this.public.color + " Microsoft Agent character embarassing himself! Fuck you. It isn't funny.",
             "I am getting fucking tired of you using this command. Fucking take a break already!",
             "DeviantArt",
@@ -401,8 +397,6 @@ let userCommands = {
             "Do you know how much /wtf quotes are there?",
             "Fun Fact: You're a fucking asshole",
             "i watch body inflation videos on youtube",
-            "ItzCrazyScout, No! More like.... ekfheiophjeodxenwobifuodhndoxnwsiohbdeiowdhn2werifhwefief! He banned euhdeioqwdheiwohjixzojqsioh r23oipwshnwq! End of rant.",
-            "Pro Hacker: NEAGEUR! [[llllllllllllll]] NEAGEUR!",
             "i play left 4 dead games 24/7",
             "i am so cool. i shit on people, add reactions  that make fun of users on discord, and abuse my admin powers. i am really so cool.",
             "This product will not operate when connected to a device which makes unauthorized copies. Please refer to your instruction booklet for more information.",
@@ -423,13 +417,12 @@ let userCommands = {
             "Sorry, i don't want you anymore.",
             "Twitter Cancel Culture! Twitter Cancel Culture! Twitter Cancel Culture! Twitter Cancel Culture! Twitter Cancel Culture!",
             "cry about it",
-            "<p hidden>[[??????????????????????????????????????????????????????????????????????????????????????]] Hello? Is anyone there? Please help me!</p>",
             "SyntaxError: Unexpected string",
             "i post random gummibar videos on bonziworld",
             "i support meatballmars",
             "PLEASE GIVE THIS VIDEO LIKES!!!!! I CANNOT TAKE IT ANYMORE!",
             "I WILL MAKE A BAD VIDEO OUT OF YOU! GRRRRRRRRRRRR!",
-            "Muted",
+            "Muted!",
             "i keep watching doodland like forever now",
             "i mined diamonds with a wooden pickaxe",
             "i kept asking for admin and now i got muted",
@@ -445,7 +438,7 @@ let userCommands = {
             "i used inspect element and now i got hate",
             "hi i am vacbedlover want to show my sexual fetish. I just kept evading my ban on collabvm to act like a forkie.",
             "i watch the potty song and now people are calling me a pottytard",
-            "bonziworld reacts to... zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+            "bonziworld reacts to... zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
             "i am danieltr52 the clown and i have inflation fetish",
             "i watch nature on pbs",
             "i post thomas theme song and now people are calling me a thomastard",
@@ -466,7 +459,7 @@ let userCommands = {
             "This PC cannot run Windows 11. The processor isn't supported for Windows 11. While this PC doesn't meet the system requirements, you'll keep getting Windows 10 Updates.",
             "I made Red Brain Productions, and i deny that i am made by Pixelworks",
             "I am SonicFan08 and i like Norbika9Entertainment and grounded videos! Wow! I also block people who call me a gotard!",
-            "When BonziWORLD leaks your memory, your system will go AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "When BonziWORLD leaks your memory, your system will go AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
             "i post i got banned on bonziworld and now i got hate",
             "i post babytv and now people are calling me a babytvtard",
             "i post sf08 news and now i got hate",
@@ -650,13 +643,13 @@ let userCommands = {
             this.socket.emit("alert", "The user you are trying to ban left. Get dunked on nerd");
         }
     },
-	"unban": function(ip) {
+    "unban": function(ip) {
         if (this.private.runlevel < 3) {
             this.socket.emit("alert", "This command requires administrator privileges");
             return;
         }
-		Ban.removeBan(ip)
-		console.log('unbanned ' + ip);
+        Ban.removeBan(ip)
+        console.log('unbanned ' + ip);
     },
     nofuckoff: function (data) {
         if (this.private.runlevel < 3) {
@@ -703,22 +696,6 @@ let userCommands = {
     godlevel: function () {
         this.socket.emit("alert", "Your godlevel is: " + this.private.runlevel + ".");
     },
-	behh: function () {
-		this.room.emit("talk", {
-			text: "Behh is the worst message! \
-        It's horrendous and spammy. I hate it. \
-        The point of messages are to show thoughts, but what thought does this show? \
-        Do you just wake up in the morning and think \"wow, I really feel like a massive fucking behh today\"? \
-        It's useless. I hate it. It just provokes a deep rooted anger within me whenever I hear it. \
-        I want to drive on over to fucking onutes house and kill him. If this was a skin I'd push it off a fucking cliff. \
-        People just say behh as if it's funny. It's not. Behh deserves to die. \
-        It deserves to have his smug little sound smashed in with a hammer. \
-        Oh wow, it's a nonsense, how fucking hilarious, I'll use it in every message I post. NO. STOP IT. It deserves to burn in hell. \
-        Why is it so goddamn dumb. You're a 4 letter work, you have no life goals, you will never accomplish anything in life apart from pissing me off. \
-        When you die nobody will mourn. I hope you die",
-			guid: this.guid
-		})
-	},
     "linux": "passthrough",
     "pawn": "passthrough",
     "bees": "passthrough",
@@ -734,13 +711,13 @@ let userCommands = {
         }
         this.room.updateUser(this);
     },
-	pope: function() {
-		if (this.private.runlevel === 3) { // removing this will cause chaos
-			this.public.color = "pope";
-			this.room.updateUser(this);
-		} else {
-			this.socket.emit("alert", "Ah ah ah! You didn't say the magic word!")
-		}
+    pope: function() {
+        if (this.private.runlevel === 3) { // removing this will cause chaos
+            this.public.color = "pope";
+            this.room.updateUser(this);
+        } else {
+            this.socket.emit("alert", "Ah ah ah! You didn't say the magic word!")
+        }
     },
     "asshole": function() {
         this.room.emit("asshole", {
@@ -807,11 +784,11 @@ let userCommands = {
             this.socket.emit("alert", "This command requires administrator privileges");
             return;
         }
-		if(text.join(' ') == "" || text.join(' ') == "undefined" || text.join(' ') == "null" || text.join(' ') == null) {
-			return;
-		} else {
-			this.room.emit("broadcast", { msg: text.join(' '), sanitize: false, title: "Broadcast from " + this.public.name });
-		}
+        if(text.join(' ') == "" || text.join(' ') == "undefined" || text.join(' ') == "null" || text.join(' ') == null) {
+            return;
+        } else {
+            this.room.emit("broadcast", { msg: text.join(' '), sanitize: false, title: "Broadcast from " + this.public.name });
+        }
     },
     limit: function (room_num) {
         if (this.private.runlevel < 3) {
@@ -859,21 +836,21 @@ let userCommands = {
         
         this.room.updateUser(this);
     },
-	"group": function (...text) {
-		text = text.join(" ")
-		if (text) {
-			this.private.group = text + ""
-			this.socket.emit("alert", "joined the group")
-			return
-		}
-		this.socket.emit("alert", "enter a group id")
-	},
-	startyping: function () {
-		this.room.emit("typing", { guid: this.guid })
-	},
-	stoptyping: function () {
-		this.room.emit("stoptyping", { guid: this.guid })
-	},
+    "group": function (...text) {
+        text = text.join(" ")
+        if (text) {
+            this.private.group = text + ""
+            this.socket.emit("alert", "joined the group")
+            return
+        }
+        this.socket.emit("alert", "enter a group id")
+    },
+    startyping: function () {
+        this.room.emit("typing", { guid: this.guid })
+    },
+    stoptyping: function () {
+        this.room.emit("stoptyping", { guid: this.guid })
+    },
     "dm":function(...text){
         text = text.join(" ")
         text = sanitize(text,settingsSantize)
