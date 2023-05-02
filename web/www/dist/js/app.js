@@ -253,8 +253,7 @@ var Bonzi = (function () {
 														bonziAlert("This person hasnt speaked yet")
 														return;
 													}
-													$("#chat_message").val("--<br><blockquote>" + _this2.last + "</blockquote> ").focus()
-													//$("#chat_message").val("<div class='hidden' style='display: none;' hidden>-- </div><br><div data-style=\"quote\">" + _this2.last + "</div> ").focus()
+													$("#chat_message").val("--quote--<br><blockquote data-style=quote>" + _this2.last + "</blockquote> ").focus()
 												}
 											},
 										},
