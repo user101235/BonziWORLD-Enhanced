@@ -49,7 +49,7 @@ node server.js
 After this, BonziWORLD Enhanced will be accessible on port 3000. ([localhost:3000](http://localhost:3000 "localhost on port 3000..."))
 <br><br>
 ## Replit/Glitch
-If you are using replit or glitch this project will require additional steps.
+If you are using [replit](https://replit.com) or [glitch](https://glitch.me), this project will require additional steps.
 
 <pre><span><code>open "/json/settings.json" in your prefered text editor and scroll all the way to the bottom,
 find an option called "isReplit" and set it to true.
