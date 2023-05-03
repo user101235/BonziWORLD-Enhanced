@@ -2029,7 +2029,7 @@ window.onload = function () {
 		}
 	}),
 	$.contextMenu({
-		selector: "#themes_icon",
+		selector: "#themes_btn",
 			items: {
 				default: { name: "Default", callback: function () { theme('') } },
                 custom: {name: "Custom", callback: function() {var url = prompt('Insert Supported Image URL for usage as the Background',`${window.location.origin}/img/desktop/__Themes/XP/wallpaper-xp.jpg`); if(getCookie("custom_theme") == ''){if(url == "") {setCookie("custom_theme", "None", 365)} else {setCookie("custom_theme", `${encodeURIComponent(url)}`, 365)}} else {if(url == "") {setCookie("custom_theme", "None", 365)} else {setCookie("custom_theme", `${encodeURIComponent(url)}`, 365)}}; if (url == "") {theme()}; if (url) {theme(`#content{background-image:url("./img/desktop/logo.png"), url("${url}"); background-repeat: no-repeat, repeat; background-size: auto, cover;}'`) }} },
@@ -2101,9 +2101,9 @@ $(document).ready(function () {
         maximized = maximized ? 0 : 1;
         $(".chat-log").toggleClass("minimized maximized");
 		if(maximized != 1) {
-			$("#room_info").addClass("log-minimized");$("#arcade_icon").addClass("log-minimized");$("#themes_icon").addClass("log-minimized");$("#room_info").removeClass("log-maximized");$("#arcade_icon").removeClass("log-maximized");$("#themes_icon").removeClass("log-maximized");
+			$("#room_info").addClass("log-minimized");$("#arcade_btn").addClass("log-minimized");$("#themes_btn").addClass("log-minimized");$("#room_info").removeClass("log-maximized");$("#arcade_btn").removeClass("log-maximized");$("#themes_btn").removeClass("log-maximized");
 		} else {
-			$("#room_info").removeClass("log-minimized");$("#arcade_icon").removeClass("log-minimized");$("#themes_icon").removeClass("log-minimized");$("#room_info").addClass("log-maximized");$("#arcade_icon").addClass("log-maximized");$("#themes_icon").addClass("log-maximized");
+			$("#room_info").removeClass("log-minimized");$("#arcade_btn").removeClass("log-minimized");$("#themes_btn").removeClass("log-minimized");$("#room_info").addClass("log-maximized");$("#arcade_btn").addClass("log-maximized");$("#themes_btn").addClass("log-maximized");
 		}
 		if(maximized != 1) {
 			$("#chat_log_list").addClass("hidden");$("#chat_log_list").removeClass("visible");
