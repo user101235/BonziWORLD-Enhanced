@@ -7,7 +7,7 @@ The source code has been made public because I would like to move on from this p
 ## What is this?
 BonziWORLD Enhanced is a fork of vanilla BonziWORLD which provides simple qol improvements and bug fixes to the original.
 <br><br>
-## What features make this different <sub>(or better)</sub> than BonziWORLD?
+## What features make this different than vanilla BonziWORLD?
 Some changes which make this stand out from the standard code by [heyjoeway](https://github.com/heyjoeway/BonziWORLD):
 - Decompressed bonzibuddy sprites (HD)
 - A chat logger
