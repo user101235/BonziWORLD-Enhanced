@@ -724,6 +724,7 @@ body.vaporwave #chat_send:active  {
     filter: drop-shadow(0px 0px 7px #5A5A5A);
 }
 #room_info  {
+    z-index: 1;
     text-shadow: 2px 2px 8px #0e0e0e8a;
     color: rgba(255, 255, 255, 0.5);
     font-weight: bold;
