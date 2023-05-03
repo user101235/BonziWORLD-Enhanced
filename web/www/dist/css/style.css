@@ -33,13 +33,6 @@ body, html  {
 .rainbow {
     animation:rainbow 2s linear infinite
 }
-
-.quote {
-    border-left: 3px solid grey;
-    display:block;
-    padding-left:3px
-}
-
 [data-style*="border"] {
     border: 1px solid black;
 }
@@ -48,6 +41,13 @@ body, html  {
     display:block;
     padding-left:3px
 }
+
+.quote {
+    border-left: 3px solid grey;
+    display:block;
+    padding-left:3px
+}
+
 [data-style*="click"] {
     cursor: pointer;
 }
@@ -724,12 +724,13 @@ body.vaporwave #chat_send:active  {
     filter: drop-shadow(0px 0px 7px #5A5A5A);
 }
 #room_info  {
+    text-shadow: 2px 2px 8px #0e0e0e8a;
     color: rgba(255, 255, 255, 0.5);
     font-weight: bold;
     line-height: 125%;
     text-align: right;
     padding: 7px;
-    font-size: 10px;
+    font-size: 11px;
     position: absolute;
     bottom: 30px;
     right: 0;
@@ -1050,19 +1051,7 @@ body.banned #page_login, body.kicked #page_login  {
 .video-link.youtube:hover, .video-link.youtube:active  {
     color: #ef5350;
 }
-#room_info  {
-    color: rgba(255, 255, 255, 0.5);
-    font-weight: bold;
-    line-height: 125%;
-    text-align: right;
-    padding: 7px;
-    font-size: 10px;
-    position: absolute;
-    bottom: 30px;
-    right: 0;
-    user-select: text;
-    -webkit-user-select: text;
-}
+
 .blur-overlay  {
     position: absolute;
     right: 0px;
@@ -1453,7 +1442,7 @@ img.emoji  {
 .bubble_media_player  {
     width: auto !important;
 }
-#themes_icon  {
+#themes_btn  {
     color: rgba(255, 255, 255, 0.5);
     font-weight: bold;
     line-height: 125%;
@@ -1461,10 +1450,9 @@ img.emoji  {
     padding: 7px;
     font-size: 10px;
     position: absolute;
-    left: 0;
 }
-#arcade_icon  {
-    image-rendering: pixelated;
+
+#arcade_btn  {
     color: rgba(255, 255, 255, 0.5);
     font-weight: bold;
     line-height: 125%;
@@ -1472,12 +1460,12 @@ img.emoji  {
     padding: 7px;
     font-size: 10px;
     position: absolute;
-    left: 0;
 }
 
 #arcade_label {
+    text-shadow: 2px 2px 8px #0e0e0e8a;
     letter-spacing: 1px;
-    font-size: 11px;
+    font-size: 13.5px;
     padding: 5px;
     margin-top: 5px;
     margin-right: 8px;
@@ -1486,13 +1474,43 @@ img.emoji  {
 }
 
 #themes_label {
+    text-shadow: 2px 2px 8px #0e0e0e8a;
     letter-spacing: 1px;
-    font-size: 11px;
+    font-size: 13.5px;
     padding: 5px;
     margin-top: 5px;
     margin-right: 8px;
     font-weight: 700;
     color: #fdfdfdba;
+}
+
+#arcade_btn {
+    bottom: 180px;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+#arcade_btn.log-maximized {
+    bottom: 180px;
+}
+
+#arcade_btn.log-minimized {
+    bottom: 52px;
+}
+
+#themes_btn {
+    left: 97px;
+    bottom: 180px;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+#themes_btn.log-maximized {
+    left: 97px;
+    bottom: 180px;
+}
+
+#themes_btn.log-minimized {
+    left: 97px;
+    bottom: 52px;
 }
 
 ::-moz-selection  {
@@ -1824,32 +1842,6 @@ audio::-webkit-media-controls-time-remaining-display  {
 }
 
 #room_info.log-minimized {
-    bottom: 50px;
-}
-
-#arcade_icon {
-    bottom: 270px;
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-#arcade_icon.log-maximized {
-    bottom: 270px;
-}
-
-#arcade_icon.log-minimized {
-    bottom: 140px;
-}
-
-#themes_icon {
-    bottom: 180px;
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-#themes_icon.log-maximized {
-    bottom: 180px;
-}
-
-#themes_icon.log-minimized {
     bottom: 50px;
 }
 
