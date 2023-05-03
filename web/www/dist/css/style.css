@@ -978,6 +978,7 @@ body.vaporwave #chat_send:active  {
     overflow: hidden;
 }
 .message_cont_arcade  {
+    z-index: 1;
     position: absolute;
     max-width: 100%;
     height: auto;
@@ -1443,6 +1444,7 @@ img.emoji  {
     width: auto !important;
 }
 #themes_btn  {
+    z-index: 1;
     color: rgba(255, 255, 255, 0.5);
     font-weight: bold;
     line-height: 125%;
@@ -1453,6 +1455,7 @@ img.emoji  {
 }
 
 #arcade_btn  {
+    z-index: 1;
     color: rgba(255, 255, 255, 0.5);
     font-weight: bold;
     line-height: 125%;
