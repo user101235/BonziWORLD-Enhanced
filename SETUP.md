@@ -42,6 +42,11 @@ This part is unneeded. The client comes pre-built.
 npm i --force
 node server.js
 ```
+### Server (optional)
+```
+Optionally, you can set a godword
+```
+
 ### Server (nginx)
 <pre><span><code><a href="https://www.youtube.com/watch?v=krcYPrjIDzU" alt="Tutorial" title="Tutorial">Tutorial</a>
 </code></span></pre>
