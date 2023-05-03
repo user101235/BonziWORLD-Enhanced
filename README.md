@@ -13,7 +13,7 @@ Some changes which make this stand out from the standard code by [heyjoeway](htt
 - A chat logger
 - Browser notifications for new chat messages
 - The ability to report misbehaving users to site moderators for review and punishment.
-- Random godwords for people using [replit](https://replit.com) or [glitch](https://glitch.com)
+- Random godwords for people using [replit](https://replit.com) or [glitch](https://glitch.me)
 - Lipsync for SpeakJS (also fixes the memory leaks)
 - Playlist and shorts support for /youtube
 - /spotify and /soundcloud allowing you to listen to your favorite artists inside BonziWORLD
