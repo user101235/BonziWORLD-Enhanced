@@ -27,6 +27,7 @@ Some changes which make this stand out from the standard code by [heyjoeway](htt
 - [TODO](TODO.md "Things I need to work on...")
 - [SETUP](SETUP.md "View the setup instructions for this project...")
 - [LICENSE](LICENSE.md "View this project's license...")
+- [BLOG POST](https://cosmicstar98.github.io/bonziworldenhanced "View the blog post...")
 
 <hr>
 
