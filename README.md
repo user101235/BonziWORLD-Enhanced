@@ -12,7 +12,6 @@ Some changes which make this stand out from the standard code by [heyjoeway](htt
 - Decompressed bonzibuddy sprites (HD)
 - A chat logger
 - Browser notifications for new chat messages
-- The ability to report misbehaving users to site moderators for review and punishment.
 - Random godwords for people using [replit](https://replit.com) or [glitch](https://glitch.me)
 - Lipsync for SpeakJS (also fixes the memory leaks)
 - Playlist and shorts support for /youtube
