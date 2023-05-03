@@ -1,3 +1,6 @@
+<p align="center" width="100%">
+  <img width="52%" height="40%" src="bwe.png?raw=true" />
+</p>
 # BonziWORLD Enhanced
 
 **This bonziworld respository houses the source code to BonziWORLD: Enhanced.**
