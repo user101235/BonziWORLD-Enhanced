@@ -445,6 +445,8 @@ var Bonzi = (function () {
                     key: "updateText",
                     value: function () {
                         if ($("div.bubble p.bubble-content").find("blockquote").length > 0){$("p.bubble-content blockquote").addClass("quote")}
+                        if ($("div.bubble p.bubble-content").find("img").length > 0){$("p.bubble-content img").addClass("no_selection")}
+                        if ($("div.bubble p.bubble-content").find("img").length > 0){$("p.bubble-content img").draggable({disabled: true})
                         0 === this.event.timer && (this.$dialog.css("display", "block"), (this.event.timer = 1), this.talk(this.event.cur().text, this.event.cur().say, !0)), "none" == this.$dialog.css("display") && this.eventNext();
                     },
                 },
