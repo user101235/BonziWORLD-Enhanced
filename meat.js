@@ -1135,6 +1135,8 @@ class User {
                     .toLowerCase().replaceAll("https://", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
+                    .toLowerCase().replaceAll("bonzi.lol", "bwe")
+                    .toLowerCase().replaceAll("bonzi.ga", "bwe")
                     .toLowerCase().replaceAll("bonziworld.lol", "bwe")
                     .toLowerCase().replaceAll("bonziworld.ga", "bwe")
                     .replaceAll("*", " ")
