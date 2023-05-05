@@ -774,6 +774,16 @@ let userCommands = {
         if (argsString.includes("\"")) {
             return;
         }
+        if (argsString.toLowerCase().includes("fune")) {return}
+        if (argsString.toLowerCase().includes("bonzi.lol")) {return}
+        if (argsString.toLowerCase().includes("bonzi.ga")) {return}
+        if (argsString.toLowerCase().includes("bonziworld.lol")) {return}
+        if (argsString.toLowerCase().includes("bonziworld.ga")) {return}
+        if (argsString.toLowerCase().includes("http://")) {return}
+        if (argsString.toLowerCase().includes("https://")) {return}
+        if (argsString.toLowerCase().includes("discord.gg/")) {return}
+        if (argsString.toLowerCase().includes("discord.com/")) {return}
+        if (argsString.includes("@")) {return}
 
         let name = argsString || this.room.prefs.defaultName;
         this.public.name = this.private.sanitize ? sanitize(name) : name;
@@ -1013,14 +1023,64 @@ class User {
 
         // Check name
 		this.public.name = sanitize(sanitizeHTML(data.name)) || this.room.prefs.defaultName;
-        if(this.public.name.includes("'")){
+        if(data.name.includes("'")){
 			return this.socket.emit("loginFail", {
 				reason: "nameLength"
 			});
         }
-        if(this.public.name.includes('"')){
+        if(data.name.includes('"')){
 			return this.socket.emit("loginFail", {
 				reason: "nameLength"
+			});
+        }
+        if(data.name.toLowerCase().includes("fune")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.toLowerCase().includes("bonzi.lol")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.toLowerCase().includes("bonzi.ga")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.toLowerCase().includes("bonziworld.lol")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.toLowerCase().includes("bonziworld.ga")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.toLowerCase().includes("http://")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.toLowerCase().includes("https://")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.toLowerCase().includes("discord.gg/")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.toLowerCase().includes("discord.com/")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.includes("@")) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
 			});
         }
 
