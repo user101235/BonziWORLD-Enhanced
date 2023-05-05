@@ -1131,25 +1131,28 @@ class User {
                     .replaceAll("@", "%")
                     .replaceAll("`", "\u200B")
                     .replaceAll(" ", "\u200B ")
-                    .replaceAll("http://", "hgrunt/ass.wav")
-                    .replaceAll("https://", "hgrunt/ass.wav")
-                    .replaceAll("discord.gg/", "hgrunt/ass.wav")
-                    .replaceAll("discord.com/", "hgrunt/ass.wav")
-                    .replaceAll("bonzi.lol", "bwe")
-                    .replaceAll("bonzi.ga", "bwe")
+                    .toLowerCase().replaceAll("http://", "hgrunt/ass.wav")
+                    .toLowerCase().replaceAll("https://", "hgrunt/ass.wav")
+                    .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
+                    .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
+                    .toLowerCase().replaceAll("bonziworld.lol", "bwe")
+                    .toLowerCase().replaceAll("bonziworld.ga", "bwe")
                     .replaceAll("*", " ")
                     .replaceAll("|", " ")
                     .replaceAll("~", " ")
+                    .replaceAll("{ROOM}", " ")
                 var txt = text
                     .replaceAll("@", "%")
                     .replaceAll("`", "\u200B")
                     .replaceAll(" ", "\u200B ")
-                    .replaceAll("http://", "hgrunt/ass.wav")
-                    .replaceAll("https://", "hgrunt/ass.wav")
-                    .replaceAll("discord.gg/", "hgrunt/ass.wav")
-                    .replaceAll("discord.com/", "hgrunt/ass.wav")
-                    .replaceAll("bonzi.lol", "bwe")
-                    .replaceAll("bonzi.ga", "bwe")
+                    .toLowerCase().replaceAll("http://", "hgrunt/ass.wav")
+                    .toLowerCase().replaceAll("https://", "hgrunt/ass.wav")
+                    .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
+                    .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
+                    .toLowerCase().replaceAll("bonzi.lol", "bwe")
+                    .toLowerCase().replaceAll("bonzi.ga", "bwe")
+                    .toLowerCase().replaceAll("bonziworld.lol", "bwe")
+                    .toLowerCase().replaceAll("bonziworld.ga", "bwe")
                     .replaceAll("*", " ")
                     .replaceAll("|", " ")
                     .replaceAll("~", " ")
@@ -1161,6 +1164,7 @@ class User {
                 hook.setAvatar(IMAGE_URL);
                 if (this.private.runlevel < 3) {
                     txt = txt.replaceAll("<", "!").replaceAll(">", "$");
+		    rid = rid.replaceAll("<", "!").replaceAll(">", "$");
                 }
                 hook.send(txt);
             } catch (err) {
