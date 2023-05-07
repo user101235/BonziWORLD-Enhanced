@@ -709,7 +709,7 @@ body.vaporwave #chat_send:active  {
 #chat_send:not(.disabled):hover  {
     background-position: 0 -33px;
 }
-#chat_send:not(.disabled):active + input  {
+#chat_send:not(.disabled):active  {
     background-position: 0 -67px;
 }
 #chat_message_cont  {
