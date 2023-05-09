@@ -775,7 +775,7 @@ let userCommands = {
             return;
         }
 	if (argsString.toLowerCase().includes("fune")) {return}
-        if (argsString.toLowerCase().match(/.*(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {return}
+        if (argsString.toLowerCase().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {return}
         if (argsString.toLowerCase().includes("http://")) {return}
         if (argsString.toLowerCase().includes("https://")) {return}
         if (argsString.toLowerCase().includes("discord.gg/")) {return}
@@ -1035,7 +1035,7 @@ class User {
 				reason: "nameMal"
 			});
         }
-        if(data.name.toLowerCase().match(/.*(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {
+        if(data.name.toLowerCase().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
@@ -1177,7 +1177,7 @@ class User {
                     .toLowerCase().replaceAll("https://", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll(/.*(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
+                    .toLowerCase().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
                     .replaceAll("*", " ")
                     .replaceAll("|", " ")
                     .replaceAll("~", " ")
@@ -1190,7 +1190,7 @@ class User {
                     .toLowerCase().replaceAll("https://", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll(/.*(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
+                    .toLowerCase().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
                     .replaceAll("*", " ")
                     .replaceAll("|", " ")
                     .replaceAll("~", " ")
