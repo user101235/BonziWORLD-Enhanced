@@ -774,11 +774,8 @@ let userCommands = {
         if (argsString.includes("\"")) {
             return;
         }
-        if (argsString.toLowerCase().includes("fune")) {return}
-        if (argsString.toLowerCase().includes("bonzi.lol")) {return}
-        if (argsString.toLowerCase().includes("bonzi.ga")) {return}
-        if (argsString.toLowerCase().includes("bonziworld.lol")) {return}
-        if (argsString.toLowerCase().includes("bonziworld.ga")) {return}
+	if (argsString.toLowerCase().includes("fune")) {return}
+        if (argsString.toLowerCase().match(/.*(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {return}
         if (argsString.toLowerCase().includes("http://")) {return}
         if (argsString.toLowerCase().includes("https://")) {return}
         if (argsString.toLowerCase().includes("discord.gg/")) {return}
@@ -1038,22 +1035,7 @@ class User {
 				reason: "nameMal"
 			});
         }
-        if(data.name.toLowerCase().includes("bonzi.lol")) {
-			return this.socket.emit("loginFail", {
-				reason: "nameMal"
-			});
-        }
-        if(data.name.toLowerCase().includes("bonzi.ga")) {
-			return this.socket.emit("loginFail", {
-				reason: "nameMal"
-			});
-        }
-        if(data.name.toLowerCase().includes("bonziworld.lol")) {
-			return this.socket.emit("loginFail", {
-				reason: "nameMal"
-			});
-        }
-        if(data.name.toLowerCase().includes("bonziworld.ga")) {
+        if(data.name.toLowerCase().match(/.*(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
@@ -1195,10 +1177,7 @@ class User {
                     .toLowerCase().replaceAll("https://", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll("bonzi.lol", "bwe")
-                    .toLowerCase().replaceAll("bonzi.ga", "bwe")
-                    .toLowerCase().replaceAll("bonziworld.lol", "bwe")
-                    .toLowerCase().replaceAll("bonziworld.ga", "bwe")
+                    .toLowerCase().replaceAll(/.*(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
                     .replaceAll("*", " ")
                     .replaceAll("|", " ")
                     .replaceAll("~", " ")
@@ -1211,10 +1190,7 @@ class User {
                     .toLowerCase().replaceAll("https://", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll("bonzi.lol", "bwe")
-                    .toLowerCase().replaceAll("bonzi.ga", "bwe")
-                    .toLowerCase().replaceAll("bonziworld.lol", "bwe")
-                    .toLowerCase().replaceAll("bonziworld.ga", "bwe")
+                    .toLowerCase().replaceAll(/.*(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
                     .replaceAll("*", " ")
                     .replaceAll("|", " ")
                     .replaceAll("~", " ")
