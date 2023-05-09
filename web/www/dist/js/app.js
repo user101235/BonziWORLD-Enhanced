@@ -2073,18 +2073,6 @@ function dm_send() {
 	$("#page_dm").hide()
 	$("#chat_message").focus()
 }
-function registerAccount() {
-	if (!$("#acc_guid").val()) {
-		$("#page_register").hide()
-		return
-	}
-	if (!$("#acc_name").val()) {
-		$("#page_register").hide()
-		return
-	}
-    $("#page_register").hide();
-	socket.emit("register",{name:$("#acc_name").val(),guid:$("#acc_guid").val()})
-}
 document.addEventListener("touchstart", function (e) {
 	e.preventDefault()
 })
