@@ -623,7 +623,7 @@ body.vaporwave #chat_log  {
 	margin-bottom: 28px;
 }
 body.vaporwave #chat_tray  {
-    background-image: url("../../img/desktop/__Themes/Vaporwave/notif_left-vaporwave.png"), url("../../img/desktop/__Themes/Vaporwave/notif_right-vaporwave.png"), url("../../img/desktop/__Themes/Vaporwave/notif-vaporwave.png");
+    background-image: url("../../img/desktop/__Themes/Vaporwave/tray_left-vaporwave.png"), url("../../img/desktop/__Themes/Vaporwave/tray_right-vaporwave.png"), url("../../img/desktop/__Themes/Vaporwave/tray-vaporwave.png");
     background-repeat: no-repeat;
     background-position: left, right, left;
     background-size: 5px 28px, 3px 28px, 100% 100%;
@@ -674,7 +674,7 @@ body.vaporwave #chat_send:active  {
     z-index: 40;
 }
 #chat_tray  {
-    background-image: url("../../img/desktop/notif_left.png"), url("../../img/desktop/notif.png");
+    background-image: url("../../img/desktop/tray_left.png"), url("../../img/desktop/tray.png");
     background-repeat: no-repeat;
     background-position: left;
     background-size: 5px 30px, 100% 100%;
@@ -712,6 +712,7 @@ body.vaporwave #chat_send:active  {
 #chat_send:not(.disabled):active  {
     background-position: 0 -67px;
 }
+
 #chat_message_cont  {
     padding: 4px;
 }
