@@ -167,10 +167,9 @@ exports.listen = function() {
             let command = list[0].toLowerCase();
             let args = list.slice(1);
             let argsString = args.join(" ");
-            commands[command].function(args);
+            commands[command]["function"](args);
         } catch(e) {
             console.log("Invalid command.");
-            console.log(e);
         }
     });
 }
