@@ -69,36 +69,6 @@ let commands = {
             );
         }
     },
-    "addadmin": {
-        "help": "ip",
-        "function": function(args) {
-				
-            let ip = args[0];
-            let reason = args.slice(2).join(" ");
-
-            Ban.login(ip, reason);
-            console.log(
-                "added admin: " +
-                ip + "," +
-                reason
-            );
-        }
-    },
-    "removeadmin": {
-        "help": "ip",
-        "function": function(args) {
-				
-            let ip = args[0];
-            let reason = args.slice(2).join(" ");
-
-            Ban.removeLogin(ip, reason);
-            console.log(
-                "removed admin: " +
-                ip + "," +
-                reason
-            );
-        }
-    },
     "broadcast": {
         "help": "[txt]",
         "function": function(args) {
