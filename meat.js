@@ -774,7 +774,7 @@ let userCommands = {
         if (argsString.includes("\"")) {
             return;
         }
-	if (argsString.toLowerCase().trim().includes("fune")) {return}
+	if (argsString.toLowerCase().trim().match(/f\s+u\s+n\s+e/gi)) {return}
         if (argsString.toLowerCase().trim().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {return}
         if (argsString.toLowerCase().includes("http://")) {return}
         if (argsString.toLowerCase().includes("https://")) {return}
@@ -1030,7 +1030,7 @@ class User {
 				reason: "nameLength"
 			});
         }
-        if(data.name.toLowerCase().trim().includes("fune")) {
+        if(data.name.toLowerCase().trim().match(/f\s+u\s+n\s+e/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
@@ -1182,7 +1182,7 @@ class User {
                     .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
                     .toLowerCase().trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
-		    .toLowerCase().trim().replaceAll("fune", "\u200B")
+		    .toLowerCase().trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
                 var txt = text
                     .replaceAll("@", "%")
                     .replaceAll("`", "\u200B")
@@ -1198,7 +1198,7 @@ class User {
                     .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
                     .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
                     .toLowerCase().trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
-		    .toLowerCase().trim().replaceAll("fune", "\u200B")
+		    .toLowerCase().trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
                 const IMAGE_URL = "https://raw.githubusercontent.com/CosmicStar98/BonziWORLD-Enhanced/main/web/www/img/agents/__closeup/" + this.public.color + ".png";
                 hook.setUsername(this.public.name + " | " + "Room ID: " + rid);
                 hook.setAvatar(IMAGE_URL);
