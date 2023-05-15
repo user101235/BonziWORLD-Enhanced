@@ -774,12 +774,13 @@ let userCommands = {
         if (argsString.includes("\"")) {
             return;
         }
-	if (argsString.toLowerCase().trim().match(/f\s+u\s+n\s+e/gi)) {return}
-        if (argsString.toLowerCase().trim().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {return}
-        if (argsString.toLowerCase().includes("http://")) {return}
-        if (argsString.toLowerCase().includes("https://")) {return}
-        if (argsString.toLowerCase().includes("discord.gg/")) {return}
-        if (argsString.toLowerCase().includes("discord.com/")) {return}
+	if (argsString.trim().match(/f\s+u\s+n\s+e/gi)) {return}
+	if (argsString.trim().match(/fune/gi)) {return}
+        if (argsString.trim().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {return}
+        if (argsString.trim().match(/https:\/\//gi)) {return}
+        if (argsString.trim().match(/https:\/\//gi)) {return}
+        if (argsString.trim().match(/(discord.gg\/|discord.gg)/gi) {return}
+        if (argsString.trim().match(/(discord.com\/|discord.com)/gi) {return}
         if (argsString.includes("@")) {return}
 
         let name = argsString || this.room.prefs.defaultName;
@@ -1030,32 +1031,37 @@ class User {
 				reason: "nameLength"
 			});
         }
-        if(data.name.toLowerCase().trim().match(/f\s+u\s+n\s+e/gi)) {
+        if(data.name.trim().match(/f\s+u\s+n\s+e/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
         }
-        if(data.name.toLowerCase().trim().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {
+        if(data.name.trim().match(/fune/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
         }
-        if(data.name.toLowerCase().includes("http://")) {
+        if(data.name.trim().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
         }
-        if(data.name.toLowerCase().includes("https://")) {
+        if(data.name.trim().match(/http:\/\//gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
         }
-        if(data.name.toLowerCase().includes("discord.gg/")) {
+        if(data.name.trim().match(/https:\/\//gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
         }
-        if(data.name.toLowerCase().includes("discord.com/")) {
+        if(data.name.trim().match(/(discord.gg\/|discord.gg)/gi)) {
+			return this.socket.emit("loginFail", {
+				reason: "nameMal"
+			});
+        }
+        if(data.name.trim().match(/(discord.com\/|discord.com)/gi)) {
 			return this.socket.emit("loginFail", {
 				reason: "nameMal"
 			});
@@ -1170,6 +1176,13 @@ class User {
         if (text.length < 1000) {
             try {
                 var rid = this.room.rid.slice(0,16)
+                    .trim().replaceAll(/http:\/\//gi, "hgrunt/ass.wav")
+                    .trim().replaceAll(/https:\/\//gi, "hgrunt/ass.wav")
+                    .trim().replaceAll(/(discord.gg\/|discord.gg)/gi, "hgrunt/ass.wav")
+                    .trim().replaceAll(/(discord.com\/|discord.com)/gi, "hgrunt/ass.wav")
+                    .trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
+		    .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
+		    .trim().replaceAll(/fune/gi, "\u200B")
                     .replaceAll("@", "%")
                     .replaceAll("`", "\u200B")
                     .replaceAll(" ", "\u200B ")
@@ -1177,13 +1190,14 @@ class User {
                     .replaceAll("|", " ")
                     .replaceAll("~", " ")
                     .replaceAll("{ROOM}", " ")
-		rid.toLowerCase().replaceAll("http://", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll("https://", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
-                    .toLowerCase().trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
-		    .toLowerCase().trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
                 var txt = text
+                    .trim().replaceAll(/http:\/\//gi, "hgrunt/ass.wav")
+                    .trim().replaceAll(/https:\/\//gi, "hgrunt/ass.wav")
+                    .trim().replaceAll(/(discord.gg\/|discord.gg)/gi, "hgrunt/ass.wav")
+                    .trim().replaceAll(/(discord.com\/|discord.com)/gi, "hgrunt/ass.wav")
+                    .trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
+		    .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
+		    .trim().replaceAll(/fune/gi, "\u200B")
                     .replaceAll("@", "%")
                     .replaceAll("`", "\u200B")
                     .replaceAll(" ", "\u200B ")
@@ -1193,12 +1207,6 @@ class User {
                     .replaceAll("{NAME}", this.public.name)
                     .replaceAll("{ROOM}", this.room.rid)
                     .replaceAll("{COLOR}", this.public.color)
-		txt.toLowerCase().replaceAll("http://", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll("https://", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll("discord.gg/", "hgrunt/ass.wav")
-                    .toLowerCase().replaceAll("discord.com/", "hgrunt/ass.wav")
-                    .toLowerCase().trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
-		    .toLowerCase().trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
                 const IMAGE_URL = "https://raw.githubusercontent.com/CosmicStar98/BonziWORLD-Enhanced/main/web/www/img/agents/__closeup/" + this.public.color + ".png";
                 hook.setUsername(this.public.name + " | " + "Room ID: " + rid);
                 hook.setAvatar(IMAGE_URL);
