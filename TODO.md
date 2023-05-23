@@ -15,5 +15,6 @@
 - [ ] Add an api for joining rooms (eg. http://localhost/api/room/join:rid) [**0% done**]
 - [x] Add mouth moving animations to all bonzi colors [**100% done**]
 - [ ] Refactor the old programming techniques in the back-end to use updated ES methods beyond 2016 (ES2018 - 2023) [**0% done**]
+- [ ] Update bootstrap.css version [**0% done**]
 
 <hr>
