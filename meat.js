@@ -21,8 +21,8 @@ if (isReplit === true) {
 }
 
 process.on("uncaughtException", (err) => {
-        console.log(err.stack);
-        throw err;
+    console.log(err.stack);
+    throw err;
 });
 
 
@@ -42,43 +42,21 @@ return string
     .replaceAll("\"", "&quot;");
 }
 
-var onCooldown = false;
-var onloginCooldown = false;
-var registerCool = false;
-var registerCooldwn;
 let roomsPublic = [];
 let rooms = {};
-let usersAll = [];
-let sockets = [];
-var ips = [];
 var noflood = [];
-let mutes = Ban.mutes;
 
-
-var Filter = require('bad-words'),
-    filter = new Filter();
-
-// https://stackoverflow.com/questions/3144711/find-the-time-left-in-a-settimeout
-function getTimeLeft(timeout) {
-    return Math.ceil((timeout._idleStart + timeout._idleTimeout - Date.now()) / 1000);
-}
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-}
 
 exports.beat = function () {
-    io.on("connection", function (socket) {
-            if(socket.handshake.query.version == settings.version && socket.handshake.query.channel == settings.channel) {
-                new User(socket);
-            } else {
-                io.use((socket, next) => {
-                    next(new Error('authentication_failed'));
-                    setTimeout(() => { socket.disconnect(true); }, 3000);
-                });
-            }
+    io.on("connection", (socket) => {
+        if (socket.handshake.query.version == settings.version && socket.handshake.query.channel == settings.channel) {
+            new User(socket);
+        } else {
+            io.use((socket, next) => {
+                next(new Error('authentication_failed'));
+                setTimeout(() => { socket.disconnect(true); }, 3000);
+            });
+        }
     });
 };
 
@@ -263,9 +241,9 @@ let godword_random = Math.floor((Math.random() * 1000000000000000) + 10);
 if (isReplit === true) {
 	console.log('Godword:', godword_random)
 
-	setInterval(function() {
-		console.log('Godword:', godword_random)
-	}, 60 * 1000); 
+	setInterval(() => {
+        console.log('Godword:', godword_random);
+    }, 60 * 1000); 
 }
 
 
@@ -354,7 +332,7 @@ let userCommands = {
             "fingerprinting on bonzi.world is giving out your location! real! not fake!",
             "how many fucking times have i told you? GIVE ME THE MARIO 64 BETA ROM NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW NOW!",
             "no comment",
-            "Yeah, of course " + this.public.name + " wants me to use /wtf. [[???????????]] Hah hah! Look at the stupid " + this.public.color + " Microsoft Agent character embarassing himself! Fuck you. It isn't funny.",
+            `Yeah, of course ${this.public.name} wants me to use /wtf. [[???????????]] Hah hah! Look at the stupid ${this.public.color} Microsoft Agent character embarassing himself! Fuck you. It isn't funny.`,
             "I am getting fucking tired of you using this command. Fucking take a break already!",
             "DeviantArt",
             "You're a [['fVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVkjng]] asshole!",
@@ -391,8 +369,8 @@ let userCommands = {
             "i use hotswap for my xbox 360",
             "i boycotted left 4 dead 2",
             "CAN U PLZ UNBAN ME PLZ PLZ PLZ PLZ PLZ PLZ PLZ PLZ",
-            "Hey, " + this.public.name + " You're a fucking asshole!",
-            "Damn, " + this.public.name + " really likes /wtf",
+            `Hey, ${this.public.name} You're a fucking asshole!`,
+            `Damn, ${this.public.name} really likes /wtf`,
             "I use an leaked build of Windows 11 on my computer.",
             "Do you know how much /wtf quotes are there?",
             "Fun Fact: You're a fucking asshole",
@@ -464,7 +442,7 @@ let userCommands = {
             "i post babytv and now people are calling me a babytvtard",
             "i post sf08 news and now i got hate",
             "i listen to spongebob theme song and now i got hate",
-	    "What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I'm the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You're fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that's just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little 'clever' comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn't, you didn't, and now you're paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You're fucking dead, skiddo."
+            "What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I'm the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You're fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that's just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little 'clever' comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn't, you didn't, and now you're paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You're fucking dead, skiddo."
         ];
         var num = Math.floor(Math.random() * wtf.length);
         this.room.emit("talk", {
@@ -661,7 +639,7 @@ let userCommands = {
             guid: data,
         });
         var user = this;
-        setTimeout(function () {
+        setTimeout(() => {
             let pu = user.room.getUsersPublic()[data];
             if (pu && pu.color) {
                 let target;
@@ -674,7 +652,7 @@ let userCommands = {
                     target.disconnect();
                     target.socket.emit("kick", {
                         reason: "No fuck off<br><br><video style='border-radius: 3px;' src=\"https://cdn.discordapp.com/attachments/954050025170825237/1025126830845472798/DankVideo15.mp4\" autoplay loop width=380>",
-						//reason: "No fuck off<br><audio style='display: none;' src=\"/sfx/no_fuck_off.mp3\" autoplay loop width=380>",
+                        //reason: "No fuck off<br><audio style='display: none;' src=\"/sfx/no_fuck_off.mp3\" autoplay loop width=380>",
                     });
                 }, 380);
             } else {
@@ -688,13 +666,13 @@ let userCommands = {
             return;
         }
 		Ban.warn(ip, reason)
-		console.log('warning to ' + ip + ' ' + reason);
+		console.log(`Sending warning to ${ip} ${reason}.`);
     },
     "report": function (ip, name, reason) {
 		Ban.addReport(ip, name, reason, this.public.name, this.room.rid);
     },
     godlevel: function () {
-        this.socket.emit("alert", "Your godlevel is: " + this.private.runlevel + ".");
+        this.socket.emit("alert", `Your godlevel is: ${this.private.runlevel}.`);
     },
     "linux": "passthrough",
     "pawn": "passthrough",
@@ -774,13 +752,13 @@ let userCommands = {
         if (argsString.includes("\"")) {
             return;
         }
-	if (argsString.trim().match(/f\s+u\s+n\s+e/gi)) {return}
-	if (argsString.trim().match(/fune/gi)) {return}
+        if (argsString.trim().match(/f\s+u\s+n\s+e/gi)) {return}
+        if (argsString.trim().match(/fune/gi)) {return}
         if (argsString.trim().match(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi)) {return}
         if (argsString.trim().match(/https:\/\//gi)) {return}
         if (argsString.trim().match(/https:\/\//gi)) {return}
-        if (argsString.trim().match(/(discord.gg\/|discord.gg)/gi) {return}
-        if (argsString.trim().match(/(discord.com\/|discord.com)/gi) {return}
+        if (argsString.trim().match(/(discord.gg\/|discord.gg)/gi)) {return}
+        if (argsString.trim().match(/(discord.com\/|discord.com)/gi)) {return}
         if (argsString.includes("@")) {return}
 
         let name = argsString || this.room.prefs.defaultName;
@@ -812,7 +790,7 @@ let userCommands = {
 
         this.prefs.room_max = room_num;
 
-        this.room.emit("alert", "The max limit of this room is now " + this.prefs.room_max);
+        this.room.emit("alert", `The max limit of this room is now ${this.prefs.room_max}`);
     },
     "pitch": function(pitch) {
         pitch = parseInt(pitch);
@@ -847,7 +825,7 @@ let userCommands = {
     "group": function (...text) {
         text = text.join(" ")
         if (text) {
-            this.private.group = text + ""
+            this.private.group = `${text}`
             this.socket.emit("alert", "joined the group")
             return
         }
@@ -870,7 +848,7 @@ let userCommands = {
             if(this.private.group === n.private.group){
                 n.socket.emit("talk",{
                     guid:this.guid,
-                    text:"<small><i>Only your group can see this.</i></small><br>"+text,
+                    text:`<small><i>Only your group can see this.</i></small><br>${text}`,
                     say:text
                 })
             }
@@ -889,12 +867,12 @@ let userCommands = {
 			data.text = sanitize(data.text, settingsSantize)
 			target.socket.emit("talk", {
 				guid: this.guid,
-				text: "<small>Only you can see this.</small><br>" + data.text,
+				text: `<small>Only you can see this.</small><br>${data.text}`,
 				say: data.text
 			})
 			this.socket.emit("talk", {
 				guid: this.guid,
-				text: "<small>Only " + pu.name + " can see this.</small><br>" + data.text,
+				text: `<small>Only ${pu.name} can see this.</small><br>${data.text}`,
 				say: data.text
 			})
 		} else {
@@ -914,7 +892,6 @@ class User {
             Ban.handleBan(this.socket);
         }
 		
-		//this.ratelimitlevel = 0;
         this.private = {
             login: false,
             sanitize: true,
@@ -1114,7 +1091,6 @@ class User {
 		this.room.join(this);
 
         this.private.login = true;
-		//this.ratelimitlevel = 0;
         this.socket.removeAllListeners("login");
 
 		// Send all user info
@@ -1140,16 +1116,6 @@ class User {
                 text: "HEY EVERYONE LOOK AT ME I AM TRYING TO SCREW WITH THE SERVER LMAO"
             };
         }
-        /*if (this.ratelimitlevel >= 100) {
-            this.socket.emit("ratelimit");        
-            Ban.mute(this.getIp(), 356, "You are currently rate limited. Please try again later.");
-            this.ratelimitlevel = 0; 
-        } else {
-            this.ratelimitlevel = this.ratelimitlevel + 15;
-            setTimeout(function(){
-                this.ratelimitlevel = this.ratelimitlevel - 15;
-            },1000)
-        }*/
         
         var msg_txt = data.text;
         if (msg_txt.includes("[[") && msg_txt.replace(/[^l]/g, "").length >= 75) data.text = "Suspicious amount of l's found."
@@ -1181,8 +1147,8 @@ class User {
                     .trim().replaceAll(/(discord.gg\/|discord.gg)/gi, "hgrunt/ass.wav")
                     .trim().replaceAll(/(discord.com\/|discord.com)/gi, "hgrunt/ass.wav")
                     .trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
-		    .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
-		    .trim().replaceAll(/fune/gi, "\u200B")
+                    .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
+                    .trim().replaceAll(/fune/gi, "\u200B")
                     .replaceAll("@", "%")
                     .replaceAll("`", "\u200B")
                     .replaceAll(" ", "\u200B ")
@@ -1196,8 +1162,8 @@ class User {
                     .trim().replaceAll(/(discord.gg\/|discord.gg)/gi, "hgrunt/ass.wav")
                     .trim().replaceAll(/(discord.com\/|discord.com)/gi, "hgrunt/ass.wav")
                     .trim().replaceAll(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gi, "bwe")
-		    .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
-		    .trim().replaceAll(/fune/gi, "\u200B")
+                    .trim().replaceAll(/f\s+u\s+n\s+e/gi, "\u200B")
+                    .trim().replaceAll(/fune/gi, "\u200B")
                     .replaceAll("@", "%")
                     .replaceAll("`", "\u200B")
                     .replaceAll(" ", "\u200B ")
@@ -1207,16 +1173,16 @@ class User {
                     .replaceAll("{NAME}", this.public.name)
                     .replaceAll("{ROOM}", this.room.rid)
                     .replaceAll("{COLOR}", this.public.color)
-                const IMAGE_URL = "https://raw.githubusercontent.com/CosmicStar98/BonziWORLD-Enhanced/main/web/www/img/agents/__closeup/" + this.public.color + ".png";
-                hook.setUsername(this.public.name + " | " + "Room ID: " + rid);
+                const IMAGE_URL = `https://raw.githubusercontent.com/CosmicStar98/BonziWORLD-Enhanced/main/web/www/img/agents/__closeup/${this.public.color}.png`;
+                hook.setUsername(`${this.public.name} | Room ID: ${rid}`);
                 hook.setAvatar(IMAGE_URL);
                 if (this.private.runlevel < 3) {
                     txt = txt.replaceAll("<", "!").replaceAll(">", "$");
-		    rid = rid.replaceAll("<", "!").replaceAll(">", "$");
+                    rid = rid.replaceAll("<", "!").replaceAll(">", "$");
                 }
                 hook.send(txt);
             } catch (err) {
-                console.log("WTF?: " + err.stack);
+                console.log(`WTF?: ${err.stack}`);
             }
         }
     }
@@ -1226,16 +1192,7 @@ class User {
         let name = sanitizeHTML(this.public.name);
         var command;
         var args;
-        /*if (this.ratelimitlevel >= 100) {
-            this.socket.emit("ratelimit");
-            Ban.mute(this.getIp(), 8, "You are currently rate limited. Please try again later.");
-            this.ratelimitlevel = 0;
-        } else {
-            this.ratelimitlevel = this.ratelimitlevel + 15;
-            setTimeout(function(){ 
-                this.ratelimitlevel = this.ratelimitlevel - 15;
-            },1000)
-        }*/
+
         try {
             var list = data.list;
             command = list[0].toLowerCase();

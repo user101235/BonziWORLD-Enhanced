@@ -143,18 +143,14 @@ var Bonzi = (function () {
                 (this.rng = new Math.seedrandom(this.seed || this.id || Math.random())),
                 (this.selContainer = "#content"),
                 (this.$container = $(this.selContainer)),
-                this.$container.append(
-					"\n\t\t\t<div id='bonzi_" +
-                        this.id +
-						"' class='bonzi'>\n\t\t\t\t<div class='bonzi_user'></span><span class='bonzi_username'></span> <i class='typing' hidden>(typing)</i></div>\n\t\t\t\t\t<div class='bonzi_placeholder'></div>\n\t\t\t\t<div style='display:none' class='bubble'>\n\t\t\t\t\t<p class='bubble-content'></p>\n\t\t\t\t<div class='close-bubble'><i class='fas fa-times' /></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t"
-                ),
+                this.$container.append(`\n\t\t\t<div id='bonzi_${this.id}' class='bonzi'>\n\t\t\t\t<div class='bonzi_user'></span><span class='bonzi_username'></span> <i class='typing' hidden>(typing)</i></div>\n\t\t\t\t\t<div class='bonzi_placeholder'></div>\n\t\t\t\t<div style='display:none' class='bubble'>\n\t\t\t\t\t<p class='bubble-content'></p>\n\t\t\t\t<div class='close-bubble'><i class='fas fa-times' /></div>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t`),
                 (this.selElement = "#bonzi_" + this.id),
-                (this.selDialog = this.selElement + " > .bubble"),
-                (this.closeDialog = this.selElement + " > .bubble > .close-bubble"),
-                (this.selDialogCont = this.selElement + " > .bubble > p"),
-                (this.selNametag = this.selElement + "  .bonzi_username"),
-                (this.selNametag2 = this.selElement + " > .bonzi-message > .timestamp"),
-                (this.selCanvas = this.selElement + " > .bonzi_placeholder"),
+                (this.selDialog = `${this.selElement} > .bubble`),
+                (this.closeDialog = `${this.selElement} > .bubble > .close-bubble`),
+                (this.selDialogCont = `${this.selElement} > .bubble > p`),
+                (this.selNametag = `${this.selElement}  .bonzi_username`),
+                (this.selNametag2 = `${this.selElement} > .bonzi-message > .timestamp`),
+                (this.selCanvas = `${this.selElement} > .bonzi_placeholder`),
                 $(this.selCanvas).width(this.data.size.x).height(this.data.size.y),
                 (this.$closeBtn = $(this.closeDialog)),
                 (this.$element = $(this.selElement)),
@@ -168,11 +164,11 @@ var Bonzi = (function () {
                 this.updateSprite(!0),
                 (this.generate_event = function (a, b, c) {
                     var _this = this;
-                    a[b](function (e) {
+                    a[b]((e) => {
                         _this[c](e);
                     });
                 }),
-                this.$closeBtn.on("click", function () {
+                this.$closeBtn.on("click", () => {
                     _this2.cancel();
                 }),
                 this.generate_event(this.$canvas, "mousedown", "mousedown"),
@@ -184,118 +180,94 @@ var Bonzi = (function () {
                 this.move(),
 					$.contextMenu({
 						selector: this.selCanvas,
-						build: function (ignoredTrigger, ignoredEvent) {
-							return {
-								items: {
-									cancel: {
-										name: "Cancel",
-										callback: function () {
-											_this2.cancel();
-										},
-									},
-									mute: {
-										name: function () {
-											return _this2.mute ? "Unmute" : "Mute";
-										},
-										callback: function () {
-											_this2.cancel(), (_this2.mute = !_this2.mute);
-										},
-									},
-									asshole: {
-										name: "Call an asshole",
-										callback: function () {
-											socket.emit("command", { list: ["asshole", _this2.userPublic.name] });
-										},
-									},
-									owo: {
-										name: "Notice Bulge",
-										callback: function () {
-											socket.emit("command", { list: ["owo", _this2.userPublic.name] });
-										},
-									},
-									uwu: {
-										name: "Notice Bulge 2",
-										callback: function () {
-											socket.emit("command", { list: ["uwu", _this2.userPublic.name] });
-										},
-									},
-									more: {
-										name: function() {
-											return "More Options"
-										},
-										items: {
-											welcome: {
-												name: "Welcome",
-												callback: function() {
-													socket.emit("command", { list: ["welcome", _this2.userPublic.name] });
-												}
-											},
-											/*aboutme: {
-												name: "See About Me",
-												callback: function() {
-													var about = _this2.userPublic.aboutme;
-													typeof about == undefined && (about = '<img class="no_selection" src="./img/icons/1.png" draggable=false; width=32> This user has not setup their About Me.'), $("#page_aboutme").show(), $("#aboutme_cont").html("<h1>" + _this2.userPublic.name + "</h1><br>" + about + "<br><br><button class='btn no_selection' onclick='javascript:hideaboutme()'>Close</button> <button class='btn no_selection' onclick='javascript:copyBonziID(\"" + _this2.id + "\")'>Copy Bonzi ID</button>")
-												}
-											},*/
-											dm: {
-												name: "Send Direct Message",
-												callback: function () {
-													$("#page_dm").show();
-													$("#dm_send_to").text(_this2.userPublic.name);
-													$("#dm_guid").val(_this2.id);
-													$("#dm_input").focus()
-												}
-											},
-											quote: {
-												name: "Quote",
-												callback: function () {
-													if (!_this2.last) {
-														bonziAlert("This person hasnt speaked yet")
-														return;
-													}
-													socket.emit("talk", {text: "--quote--<br><blockquote>" + _this2.last + "</blockquote>"});
-													//$("#chat_message").val("--quote--<br><blockquote>" + _this2.last + "</blockquote> ").focus()
-												}
-											},
-										},
-									},
-									modtools: {
-										name: function() {
-											return admin ? "Moderation Tools" : ""
-										},
-										disabled: function() {
-											return !admin
-										},
-										items: {
-											kick: {
-												name: function() {
-													return admin ? "🔨 Kick" : ""
-												},
-												callback: function() {
-													socket.emit("command", { list: ["kick", _this2.id]})
-												}
-											},
-											ban: {
-												name: function() {
-													return admin ? "🔨 Ban" : ""
-												},
-												callback: function() {
-													socket.emit("command", {list: ["ban", _this2.id]})
-												}
-											},
-											nofuckoff: {
-												name: function() {
-													return admin ? "🔨 No Fuck Off" : ""
-												},
-												callback: function() {
-													socket.emit("command", {list: ["nofuckoff", _this2.id]})
-												}
-											},
-										},
-									},
-								},
-							};
-						},
+						build: (ignoredTrigger, ignoredEvent) => ({
+                            items: {
+                                cancel: {
+                                    name: "Cancel",
+                                    callback: () => {
+                                        _this2.cancel();
+                                    },
+                                },
+                                mute: {
+                                    name: () => _this2.mute ? "Unmute" : "Mute",
+                                    callback: () => {
+                                        _this2.cancel(), (_this2.mute = !_this2.mute);
+                                    },
+                                },
+                                asshole: {
+                                    name: "Call an asshole",
+                                    callback: () => {
+                                        socket.emit("command", { list: ["asshole", _this2.userPublic.name] });
+                                    },
+                                },
+                                owo: {
+                                    name: "Notice Bulge",
+                                    callback: () => {
+                                        socket.emit("command", { list: ["owo", _this2.userPublic.name] });
+                                    },
+                                },
+                                uwu: {
+                                    name: "Notice Bulge 2",
+                                    callback: () => {
+                                        socket.emit("command", { list: ["uwu", _this2.userPublic.name] });
+                                    },
+                                },
+                                more: {
+                                    name: () => "More Options",
+                                    items: {
+                                        welcome: {
+                                            name: "Welcome",
+                                            callback: () => {
+                                                socket.emit("command", { list: ["welcome", _this2.userPublic.name] });
+                                            }
+                                        },
+                                        dm: {
+                                            name: "Send Direct Message",
+                                            callback: () => {
+                                                $("#page_dm").show();
+                                                $("#dm_send_to").text(_this2.userPublic.name);
+                                                $("#dm_guid").val(_this2.id);
+                                                $("#dm_input").focus();
+                                            }
+                                        },
+                                        quote: {
+                                            name: "Quote",
+                                            callback: () => {
+                                                if (!_this2.last) {
+                                                    bonziAlert("This person hasnt speaked yet");
+                                                    return;
+                                                }
+                                                socket.emit("talk", { text: `--quote--<br><blockquote>${_this2.last}</blockquote>` });
+                                            }
+                                        },
+                                    },
+                                },
+                                modtools: {
+                                    name: () => admin ? "Moderation Tools" : "",
+                                    disabled: () => !admin,
+                                    items: {
+                                        kick: {
+                                            name: () => admin ? "🔨 Kick" : "",
+                                            callback: () => {
+                                                socket.emit("command", { list: ["kick", _this2.id] });
+                                            }
+                                        },
+                                        ban: {
+                                            name: () => admin ? "🔨 Ban" : "",
+                                            callback: () => {
+                                                socket.emit("command", { list: ["ban", _this2.id] });
+                                            }
+                                        },
+                                        nofuckoff: {
+                                            name: () => admin ? "🔨 No Fuck Off" : "",
+                                            callback: () => {
+                                                socket.emit("command", { list: ["nofuckoff", _this2.id] });
+                                            }
+                                        },
+                                    },
+                                },
+                            },
+                        }),
 							animation: { duration: 175, show: "fadeIn", hide: "fadeOut" },
 					}),
                 (this.needsUpdate = !1);
@@ -526,7 +498,7 @@ var Bonzi = (function () {
 						    (say=say.replace(/{ROOM}/gi,Room_ID));(text=text.replace(/{ROOM}/gi,Room_ID));(say=say.replace(/~/gi,"?"));(say=say.replace(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gim,window.location.host));(text=text.replace(/(\S*)(bonzi|bonziworld).(lol|ga|tk|cf|com|net)/gim,window.location.host));(text=text.replace(/'/gi,"&apos;"));(text=text.replace(/"/gi,"&quot;"));(text=text.replace(/#/gi,"&num;"));(say=say.replace(/bzw/gi,"bonziworld"));(say=say.replace(/bwe/gi,"bonziworld enhanced"));(say=say.replace(/bwr/gi,"bonziworld revived"));(say=say.replace(/bwce/gi,"bonziworld community edition"));(say=say.replace(/&amp;/gi,"and"));(say=say.replace(/&num;/gi,"hash tag"));(say=say.replace(/&gt;/gi,"greater than"));(say=say.replace(/&lt;/gi,"less than"));(say=say.replace(/&gt/gi,"greater than"));(say=say.replace(/&lt/gi,"less than"));(say=say.replace(/TTS/g,"text to speech"));(say=say.replace(/tts/g,"text to speech"));(say=say.replace(/wdym/gi,"what do you mean"));(say=say.replace(/idc/gi,"i don't care"));(say=say.replace(/idk/gi,"i don't know"));(say=say.replace(/btw/gi,"by the way"));(say=say.replace(/idfc/gi,"i don't fucking care"));(say=say.replace(/idfk/gi,"i don't fucking know"));(say=say.replace(/idgaf/gi,"i don't give a fuck"));(say=say.replace(/wtf/gi,"what the fuck?"));(say=say.replace(/wth/gi,"what the hell?"));(say=say.replace(/lmao/gi,"laughing my ass off"));(say=say.replace(/lmfao/gi,"laughing my fucking ass off"));(say=say.replace(/kys/gi,"kill yourself"));(say=say.replace(/cys/gi,"cum yourself"));(say=say.replace(/fys/gi,"fuck yourself"));(say=say.replace(/afaik/gi,"as far as i know"));(say=say.replace(/iirc/gi,"if i remember correctly"));(say=say.replace(/IT/gi,"it"));(say=say.replace(/PST/g,"pacific standard time"));(say=say.replace(/MST/g,"mountain standard time"));(say=say.replace(/CST/g,"central standard time"));(say=say.replace(/EST/g,"eastern standard time"));(say=say.replace(/AST/g,"alantic standard time"));(say=say.replace(/PDT/g,"pacific daylight time"));(say=say.replace(/MDT/g,"mountain daylight time"));(say=say.replace(/CDT/g,"central daylight time"));(say=say.replace(/EDT/g,"eastern daylight time"));(say=say.replace(/ADT/g,"alantic daylight time"));
 						    if(settings.notifications.value === true && LoggedIn === true) {try {new Notification("Room ID: " + Room_ID, { body: date + " | " + this.userPublic.name + ": " + text, icon: "./img/agents/__closeup/" + this.userPublic.color + ".png" })} catch {}};
 						    var toscroll = document.getElementById("chat_log_list").scrollHeight - document.getElementById("chat_log_list").scrollTop < 605;
-						    document.getElementById("chat_log_list").innerHTML += "<ul><li class=\"bonzi-message cl-msg ng-scope bonzi-event\" id=\"cl-msg-"+self.id+"\"><span class=\"timestamp ng-binding\"><small style=\"font-size:11px;font-weight:normal;\">"+date+"</small></span> <span class=\"sep tn-sep\"> | </span><span class=\"bonzi-name ng-isolate-scope\"><span class=\"event-source ng-binding ng-scope\"><font color='"+getBonziHEXColor(this.userPublic.color)+"'>"+this.userPublic.name+"</font></span></span><span class=\"sep bn-sep\">: </span><span class=\"body ng-binding ng-scope\" style=\"color:#dcdcdc;\">"+text+"</span></li></ul>";
+						    document.getElementById("chat_log_list").innerHTML += `<ul><li class="bonzi-message cl-msg ng-scope bonzi-event" id="cl-msg-${self.id}"><span class="timestamp ng-binding"><small style="font-size:11px;font-weight:normal;\">${date}</small></span> <span class="sep tn-sep"> | </span><span class="bonzi-name ng-isolate-scope"><span class="event-source ng-binding ng-scope"><font color='${getBonziHEXColor(this.userPublic.color)}'>${this.userPublic.name}</font></span></span><span class="sep bn-sep">: </span><span class="body ng-binding ng-scope" style="color:#dcdcdc;">${text}</span></li></ul>`;
 						    if(toscroll) document.getElementById("chat_log_list").scrollTop = document.getElementById("chat_log_list").scrollHeight;
 
                             
@@ -618,7 +590,7 @@ var Bonzi = (function () {
                         if (!this.mute) {
                             this.$dialog.addClass('bubble_autowidth');
                             function checkurl(){if(vid.includes("?")){return "&"} else {return "?"}};
-                            this.$dialogCont.html("\n\t\t\t\t\t<iframe type='text/html' width='480' height='270' scrolling='no' frameborder='no' allow='autoplay' \n\t\t\t\t\tsrc='https://www.youtube.com/embed/" + vid.replace(/playlist/gi,"videoseries").replace(/(^\w+:|^)\/.*\.youtube\.com\//, '') + "" + checkurl() + "autoplay=1&modestbranding=1&playsinline=0&showinfo=0&enablejsapi=1&origin=" + window.location.origin + "&widgetid=1&color=purple&theme=dark' \n\t\t\t\t\tstyle='width:480px;height:270px; border-radius: 7px;'\n\t\t\t\t\tframeborder='0'\n\t\t\t\t\allow='autoplay; encrypted-media'\n\t\t\t\t\tallowfullscreen='allowfullscreen'\n\t\t\t\t\tmozallowfullscreen='mozallowfullscreen'\n\t\t\t\t\tmsallowfullscreen='msallowfullscreen'\n\t\t\t\t\toallowfullscreen='oallowfullscreen'\n\t\t\t\t\twebkitallowfullscreen='webkitallowfullscreen'\n\t\t\t\t\t></iframe>\n\t\t\t\t"), this.$dialog.show();
+                            this.$dialogCont.html(`\n\t\t\t\t\t<iframe type='text/html' width='480' height='270' scrolling='no' frameborder='no' allow='autoplay' \n\t\t\t\t\tsrc='https://www.youtube.com/embed/${vid.replace(/playlist/gi, "videoseries").replace(/(^\w+:|^)\/.*\.youtube\.com\//, '')}${checkurl()}autoplay=1&modestbranding=1&playsinline=0&showinfo=0&enablejsapi=1&origin=${window.location.origin}&widgetid=1&color=purple&theme=dark' \n\t\t\t\t\tstyle='width:480px;height:270px; border-radius: 7px;'\n\t\t\t\t\tframeborder='0'\n\t\t\t\t\allow='autoplay; encrypted-media'\n\t\t\t\t\tallowfullscreen='allowfullscreen'\n\t\t\t\t\tmozallowfullscreen='mozallowfullscreen'\n\t\t\t\t\tmsallowfullscreen='msallowfullscreen'\n\t\t\t\t\toallowfullscreen='oallowfullscreen'\n\t\t\t\t\twebkitallowfullscreen='webkitallowfullscreen'\n\t\t\t\t\t></iframe>\n\t\t\t\t`), this.$dialog.show();
                         }
                     },
                 },
@@ -627,7 +599,7 @@ var Bonzi = (function () {
                     value: function (aud) {
                         if (!this.mute) {
 							this.$dialog.addClass('bubble_autowidth');
-                            this.$dialogCont.html("<iframe height='166' scrolling='no' frameborder='no' allow='autoplay' style='font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100; border-radius: 7px;' src='https://w.soundcloud.com/player/?url=" + aud.replace(/(^\w+:|^)\/\//, '//') + "&color=%2374119c&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=true'></iframe><div style='font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100; border-radius: 7px;'></div>"), this.$dialog.show();
+                            this.$dialogCont.html(`<iframe height='166' scrolling='no' frameborder='no' allow='autoplay' style='font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100; border-radius: 7px;' src='https://w.soundcloud.com/player/?url=${aud.replace(/(^\w+:|^)\/\//, '//')}&color=%2374119c&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=true'></iframe><div style='font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100; border-radius: 7px;'></div>`), this.$dialog.show();
                         }
                     },
                 },
@@ -636,7 +608,7 @@ var Bonzi = (function () {
                     value: function (aud) {
                         if (!this.mute) {
 							this.$dialog.addClass('bubble_autowidth');
-                            this.$dialogCont.html("<iframe style='border-radius:12px;width:415px;' src='https://open.spotify.com/embed/" + aud.replace(/(^\w+:|^)\/.*\.spotify\.com\//, '') + "?utm_source=generator&theme=0' width='60%' height='152' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>"), this.$dialog.show();
+                            this.$dialogCont.html(`<iframe style='border-radius:12px;width:415px;' src='https://open.spotify.com/embed/${aud.replace(/(^\w+:|^)\/.*\.spotify\.com\//, '')}?utm_source=generator&theme=0' width='60%' height='152' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>`), this.$dialog.show();
                         }
                     },
                 },
@@ -645,7 +617,7 @@ var Bonzi = (function () {
                     value: function (img) {
                         if (!this.mute) {
                             var b = "embed";
-                            this.$dialogCont.html("<img id='bw_image' width='170' max-height='460' src='" + img + "'></img>"), this.$dialog.show();
+                            this.$dialogCont.html(`<img id='bw_image' width='170' max-height='460' src='${img}'></img>`), this.$dialog.show();
                         }
                     },
                 },
@@ -655,7 +627,7 @@ var Bonzi = (function () {
                         if (!this.mute) {
                             var b = "embed";
                             this.$dialog.addClass('bubble_autowidth');
-                            this.$dialogCont.html("<video id='bw_video' style='border-radius: 7px;' controls height='270' autoplay loop><source src='" + vid + "' type='video/mp4'></video>"), this.$dialog.show();
+                            this.$dialogCont.html(`<video id='bw_video' style='border-radius: 7px;' controls height='270' autoplay loop><source src='${vid}' type='video/mp4'></video>`), this.$dialog.show();
                         }
                     },
                 },
@@ -665,7 +637,7 @@ var Bonzi = (function () {
 						if (!this.mute) {
 							var b = "embed";
 							this.$dialog.addClass('bubble_autowidth');
-							this.$dialogCont.html("<audio id='bw_audio' controls autoplay loop><source src='" + aud + "' type='audio/mp3'></source></audio>"), this.$dialog.show();
+							this.$dialogCont.html(`<audio id='bw_audio' controls autoplay loop><source src='${aud}' type='audio/mp3'></source></audio>`), this.$dialog.show();
 						}
                     },
                 },
@@ -755,7 +727,7 @@ var Bonzi = (function () {
                     key: "asshole",
                     value: function (target) {
                         this.runSingleEvent([
-                            { type: "text", text: "Hey, " + target + "!" },
+                            { type: "text", text: `Hey, ${target}!` },
                             { type: "text", text: "You're a fucking asshole!", say: "your a fucking asshole!" },
                             { type: "anim", anim: "grin_fwd", ticks: 15 },
                             { type: "idle" },
@@ -766,7 +738,7 @@ var Bonzi = (function () {
                     key: "welcome",
                     value: function (target) {
                         this.runSingleEvent([
-                            { type: "text", text: "Hello, " + target + "!" },
+                            { type: "text", text: `Hello, ${target}!` },
                             { type: "text", text: "Welcome to BonziWORLD Enhanced!", say: "Welcome to BonziWORLD Enhanced!" },
                             { type: "anim", anim: "praise_fwd", ticks: 15 },
 							{ type: "anim", anim: "backflip", ticks: 15 },
@@ -779,7 +751,7 @@ var Bonzi = (function () {
 					key: "owo",
                     value: function (target, data) {
                         this.runSingleEvent([
-                            { type: "text", text: "*notices " + target + "'s BonziBulge™*", say: "notices " + target + "s bonzibulge" },
+                            { type: "text", text: `*notices ${target}'s BonziBulge™*`, say: `notices ${target}s bonzibulge` },
                             { type: "text", text: "♥ ( 。 O ω O 。 )<br/>owo, wat dis?", say: "oh woah, what diss?" },
                         ]);
                     },
@@ -788,7 +760,7 @@ var Bonzi = (function () {
 					key: "uwu",
                     value: function (target, data) {
                         this.runSingleEvent([
-                            { type: "text", text: "*notices " + target + "'s BonziBulge™*", say: "notices " + target + "s bonzibulge" },
+                            { type: "text", text: `*notices ${target}'s BonziBulge™*`, say: `notices ${target}s bonzibulge` },
                             { type: "text", text: "♥ ( 。 U ω U 。 )<br/>uwu, wat dis? uwu", say: "uwu, what diss?" },
                         ]);
                     },
@@ -799,8 +771,8 @@ var Bonzi = (function () {
                         var stage = BonziHandler.stage;
                             stage.removeChild(this.sprite);
                             var info = BonziData.sprite,
-                                imgSrc = "./img/agents/" + this.color + ".png";
-                            this.colorPrev != this.color && (delete this.sprite, (this.sprite = new createjs.Sprite(new createjs.SpriteSheet({ images: ["./img/agents/" + this.color + ".png"], frames: info.frames, animations: info.animations }), hide ? "gone" : "idle")), (this.sprite.id = this.id));
+                                imgSrc = `./img/agents/${this.color}.png`;
+                            this.colorPrev != this.color && (delete this.sprite, (this.sprite = new createjs.Sprite(new createjs.SpriteSheet({ images: [`./img/agents/${this.color}.png`], frames: info.frames, animations: info.animations }), hide ? "gone" : "idle")), (this.sprite.id = this.id));
                             stage.addChild(this.sprite);
                             this.move();
                     },
@@ -1227,7 +1199,7 @@ function linkify(text) {
                 (this.prepSprites = function () {
 					for (var spriteColors = this.sprites, i = 0; i < spriteColors.length; i++) {
 						var color = spriteColors[i],
-                            spriteData = { images: ["./img/agents/" + color + ".png"], frames: BonziData.sprite.frames, animations: BonziData.sprite.animations };
+                            spriteData = { images: [`./img/agents/${color}.png`], frames: BonziData.sprite.frames, animations: BonziData.sprite.animations };
                         this.spriteSheets[color] = new createjs.SpriteSheet(spriteData);
                     }
                 }),
@@ -1539,182 +1511,169 @@ function bzSetup() {
             Room_ID = data.room;
 		}),
 	window.content = $("#content")[0],
-        socket.on("updateAll", function (data) {
+        socket.on("updateAll", (data) => {
             $("#page_login").hide(), (usersPublic = data.usersPublic), usersUpdate(), BonziHandler.bonzisCheck();
         }),
-        socket.on("update", function (data) {
+        socket.on("update", (data) => {
             (window.usersPublic[data.guid] = data.userPublic), usersUpdate(), BonziHandler.bonzisCheck();
         }),
-		socket.on("talk", function (data) {
+		socket.on("talk", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.runSingleEvent([{ type: "text", text: data.text, say: data.say || data.text }]);
         }),
-        socket.on("joke", function (data) {
+        socket.on("joke", (data) => {
             var b = bonzis[data.guid];
             (b.rng = new Math.seedrandom(data.rng)), b.cancel(), b.joke();
         }),
-        socket.on("youtube", function (data) {
+        socket.on("youtube", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.youtube(data.vid);
         }),
-        socket.on("soundcloud", function (data) {
+        socket.on("soundcloud", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.soundcloud(data.aud);
         }),
-        socket.on("spotify", function (data) {
+        socket.on("spotify", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.spotify(data.aud);
         }),
-		socket.on("image", function (data) {
-			var b = bonzis[data.guid];
-			b.cancel(), b.image(data.img);
-		}),
-		socket.on("video", function (data) {
-			var b = bonzis[data.guid];
-			b.cancel(), b.video(data.vid);
-		}),
-		socket.on("audio", function (data) {
-			var b = bonzis[data.guid];
-			b.cancel(), b.audio(data.aud);
-		}),
-        socket.on("fact", function (data) {
+		socket.on("image", (data) => {
+            var b = bonzis[data.guid];
+            b.cancel(), b.image(data.img);
+        }),
+		socket.on("video", (data) => {
+            var b = bonzis[data.guid];
+            b.cancel(), b.video(data.vid);
+        }),
+		socket.on("audio", (data) => {
+            var b = bonzis[data.guid];
+            b.cancel(), b.audio(data.aud);
+        }),
+        socket.on("fact", (data) => {
             var b = bonzis[data.guid];
             (b.rng = new Math.seedrandom(data.rng)), b.cancel(), b.fact();
         }),
-        socket.on("think", function (data) {
-        	var b = bonzis[data.guid];
-        	b.cancel(), b.think();
+        socket.on("think", (data) => {
+            var b = bonzis[data.guid];
+            b.cancel(), b.think();
         }),
-        socket.on("sad", function (data) {
-        	var b = bonzis[data.guid];
-        	b.cancel(), b.sad();
+        socket.on("sad", (data) => {
+            var b = bonzis[data.guid];
+            b.cancel(), b.sad();
         }),
-        socket.on("backflip", function (data) {
-        	var b = bonzis[data.guid];
-        	b.cancel(), b.backflip(data.swag);
+        socket.on("backflip", (data) => {
+            var b = bonzis[data.guid];
+            b.cancel(), b.backflip(data.swag);
         }),
-        socket.on("clap", function (data) {
-        	var b = bonzis[data.guid];
-        	b.cancel(), b.clap();
+        socket.on("clap", (data) => {
+            var b = bonzis[data.guid];
+            b.cancel(), b.clap();
         }),
-        socket.on("swag", function (data) {
-        	var b = bonzis[data.guid];
-        	b.cancel(), b.swag();
+        socket.on("swag", (data) => {
+            var b = bonzis[data.guid];
+            b.cancel(), b.swag();
         }),
-        socket.on("praise", function (data) {
+        socket.on("praise", (data) => {
         	var b = bonzis[data.guid];
         	b.cancel(), b.praise();
         }),
-        socket.on("shrug", function (data) {
+        socket.on("shrug", (data) => {
         	var b = bonzis[data.guid];
         	b.cancel(), b.shrug();
         }),
-        socket.on("earth", function (data) {
+        socket.on("earth", (data) => {
         	var b = bonzis[data.guid];
         	b.cancel(), b.earth();
         }),
-        socket.on("grin", function (data) {
+        socket.on("grin", (data) => {
         	var b = bonzis[data.guid];
         	b.cancel(), b.grin();
         }),
-        socket.on("asshole", function (data) {
+        socket.on("asshole", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.asshole(data.target);
         }),
-        socket.on("welcome", function (data) {
+        socket.on("welcome", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.welcome(data.target);
         }),
-        socket.on("owo", function (data) {
+        socket.on("owo", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.owo(data.target);
         }),
-        socket.on("uwu", function (data) {
+        socket.on("uwu", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.uwu(data.target);
         }),
-        socket.on("triggered", function (data) {
+        socket.on("triggered", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.runSingleEvent(b.data.event_list_triggered);
         }),
-        socket.on("twiggered", function (data) {
+        socket.on("twiggered", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.runSingleEvent(b.data.event_list_twiggered);
         }),
-        socket.on("linux", function (data) {
+        socket.on("linux", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.runSingleEvent(b.data.event_list_linux);
         }),
-        socket.on("pawn", function (data) {
+        socket.on("pawn", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.runSingleEvent(b.data.event_list_pawn);
         }),
-        socket.on("bees", function (data) {
+        socket.on("bees", (data) => {
             var b = bonzis[data.guid];
             b.cancel(), b.runSingleEvent(b.data.event_list_bees);
         }),
-        socket.on("vaporwave", function (data) {
-            $("body").addClass("vaporwave");
-        }),
-        socket.on("unvaporwave", function (data) {
-            $("body").removeClass("vaporwave");
-        }),
-		socket.on("alert", function(data) {
-			bonziAlert(data)
-		}),
-		socket.on("broadcast", function(data) {
-			bonziBroadcast(data)
-		}),
-		socket.on("admin",function(){
-			admin = true;
-		}),
-		socket.on("typing", function (data) {
-			if(!settings.typing.value) return;
-			var b = bonzis[data.guid];
-			b.typing(true)
-		}), 
-		socket.on("stoptyping", function (data) {
+        socket.on("vaporwave", (data) => {$("body").addClass("vaporwave")}),
+        socket.on("unvaporwave", (data) => {$("body").removeClass("vaporwave")}),
+		socket.on("alert", (data) => {bonziAlert(data)}),
+		socket.on("broadcast", (data) => {bonziBroadcast(data)}),
+		socket.on("admin",() => {admin = true}),
+		socket.on("typing", (data) => {
+            if (!settings.typing.value)
+                return;
+            var b = bonzis[data.guid];
+            b.typing(true);
+        }), 
+		socket.on("stoptyping", (data) => {
 			var b = bonzis[data.guid];
 			b.typing(false)
 		}),
-	$("#chat_message").keydown(function (key) {
-		if (key.which == 13) {
-			typing = false;
-			socket.emit("command", { list: ["stoptyping"] });
-			clearTimeout(typingTimeout);
-			return;
-		}
-		if (!typing) {
-			socket.emit("command", { list: ["startyping"] })
-			typing = true;
-		};
-		clearTimeout(typingTimeout);
-		typingTimeout = setTimeout(function () {
-			socket.emit("command", { list: ["stoptyping"] });
-			typing = false;
-		}, 2000);
-	}),
-        socket.on("leave", function (data) {
+	    $("#chat_message").keydown((key) => {
+            if (key.which == 13) {
+                typing = false;
+                socket.emit("command", { list: ["stoptyping"] });
+                clearTimeout(typingTimeout);
+                return;
+            }
+            if (!typing) {
+                socket.emit("command", { list: ["startyping"] });
+                typing = true;
+            };
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                socket.emit("command", { list: ["stoptyping"] });
+                typing = false;
+            }, 2000);
+        }),
+        socket.on("leave", (data) => {
             var b = bonzis[data.guid];
-            setTimeout(function () {
+            setTimeout(() => {
                 var surf_gone_sfx = new Audio("./sfx/agents/bye.mp3");
                 surf_gone_sfx.play();
             }, 600);
             void 0 !== b &&
-                b.exit(
-                    function (data) {
-                        this.deconstruct(), delete bonzis[data.guid], delete usersPublic[data.guid], usersUpdate();
-                    }.bind(b, data)
-                );
+                b.exit(function (data) {
+                    this.deconstruct(), delete bonzis[data.guid], delete usersPublic[data.guid], usersUpdate();
+                }.bind(b, data));
         }),
-        socket.on("reconnect", function () {
+        socket.on("reconnect", () => {
             window.banned || window.kicked || $("#page_error").hide(), usersUpdate(), BonziHandler.bonzisCheck();
         });
 }
-socket.on("user", function (data) {
-    window.user = data;
-}),
-$(document).ready(function () {
+socket.on("user", (data) => {window.user = data}),
+$(document).ready(() => {
     /*
      * Check for browser support
      */
@@ -1734,7 +1693,6 @@ $(document).ready(function () {
     var voiceSelect = document.getElementById("voice");
 
     // Get the attribute controls.
-
     // Fetch the list of voices and populate the voice options.
     function loadVoices() {
         // Fetch the available voices.
@@ -1775,7 +1733,7 @@ $(document).ready(function () {
         }
         window.speechSynthesis.cancel();
         if (!func) {
-            func = function () {};
+            func = function () { };
         }
         // Create a new instance of SpeechSynthesisUtterance.
         msg = new SpeechSynthesisUtterance();
@@ -1784,7 +1742,6 @@ $(document).ready(function () {
         msg.onend = func;
 
         // Set the attributes.
-
         // If a voice has been selected, find the voice and set the
         // utterance instance's voice attribute.
         if (voiceSelect.value) {
@@ -1827,27 +1784,27 @@ $(document).ready(function () {
         });
     });*/
 }),
-$(function () {
+$(() => {
     $("#login_go").click(Load);
-    $("#login_name, #login_room").keypress(function (e) {
+    $("#login_name, #login_room").keypress((e) => {
         13 == e.which && login();
     }),
-    socket.on("ban", function (data) {
+    socket.on("ban", (data) => {
         (window.banned = !0), (window.banData = data), $("#page_ban").show(), (ban_sfx = new Audio("./sfx/ui/bonzi/ban.mp3")), ban_sfx.play(), $("#ban_reason").html(data.reason || "Being retarded? IDK. The fucker that banned you didn't specify."), $("#ban_end").html(new Date(data.end).toString());
     }),
-    socket.on("kick", function (data) {
+    socket.on("kick", (data) => {
         (window.kicked = !0), (window.kickData = data), $("#page_kick").show(), (kick_sfx = new Audio("./sfx/ui/bonzi/kick.mp3")), kick_sfx.play(), $("#kick_reason").html(data.reason || "Being retarded? IDK. The fucker that kicked you didn't specify.");
     }),
-    socket.on("nofuckoff", function (data) {    
+    socket.on("nofuckoff", (data) => {
         var sfx = new Audio("./sfx/ui/bonzi/no_fuck_off.mp3");
-		sfx.play();
-        setTimeout(function(){
+        sfx.play();
+        setTimeout(() => {
             var sfx = new Audio("./sfx/ui/bonzi/brrrrrrt.mp3");
             sfx.play();
-            bonzis[data.guid].deconstruct()
-        },1084)
+            bonzis[data.guid].deconstruct();
+        }, 1084);
     }),
-    socket.on("loginFail", function (data) {
+    socket.on("loginFail", (data) => {
         var errorText = {
             "nameLength": "Your name is too long.",
             "full": "That room is full.",
@@ -1859,11 +1816,11 @@ $(function () {
             "TooMany": "You're already logged in!"
         };
         $("#login_card").show(),
-        $("#login_load").hide(),
-        $("#login_error").show().text(`Error: ${errorText[data.reason]} (${data.reason})`);
-        console.error(`[BONZI-Error]:  (Cause: ${data.reason})\n${errorText[data.reason]}`);
+            $("#login_load").hide(),
+            $("#login_error").show().text(`Error: ${errorText[data.reason]} (${data.reason})`);
+            console.error(`[BONZI-Error]:  (Cause: ${data.reason})\n${errorText[data.reason]}`);
     }),
-    socket.on("commandFail", function (data) {
+    socket.on("commandFail", (data) => {
         var errorText = {
             "unknown": "An unknown error has occured, please try again.",
             "runlevel": "You don't have permission to use that command.",
@@ -1871,17 +1828,11 @@ $(function () {
             "cooldown": "You're on cooldown, please do not spam commands!",
             "notexist": "That command doesn't exist!"
         };
-        console.error(`[BONZI-Error]:  (Cause: ${data.reason})\n${errorText[data.reason]}`);
+            console.error(`[BONZI-Error]:  (Cause: ${data.reason})\n${errorText[data.reason]}`);
     }),
-    socket.on("disconnect", function (data) {
-        errorFatal();
-    });
-    socket.on("restarting", function() {
-        errorReboot();
-    });
-    socket.on("acid", function() {
-        $("#bonzi_canvas").toggleClass("acid");
-    });
+    socket.on("disconnect", (data) => {errorFatal()});
+    socket.on("restarting", () => {errorReboot()});
+    socket.on("acid", () => {$("#bonzi_canvas").toggleClass("acid")});
 }),
 //var usersAmt = 0,
     usersKeys = [];
@@ -1932,12 +1883,8 @@ function touchHandler(event) {
     var simulatedEvent = document.createEvent("MouseEvent");
     simulatedEvent.initMouseEvent(type, !0, !0, window, 1, first.screenX, first.screenY, first.clientX, first.clientY, !1, !1, !1, !1, 0, null), first.target.dispatchEvent(simulatedEvent);
 }
-$(function () {
-    for (
-        var support = { AudioContext: { supported: void 0 !== (window.AudioContext || window.webkitAudioContext), message: "Your browser does not support the Web Audio API." } }, supported = !0, supportKeys = Object.keys(support), i = 0;
-        i < supportKeys.length;
-        i++
-    ) {
+$(() => {
+    for (var support = { AudioContext: { supported: void 0 !== (window.AudioContext || window.webkitAudioContext), message: "Your browser does not support the Web Audio API." } }, supported = !0, supportKeys = Object.keys(support), i = 0; i < supportKeys.length; i++) {
         var obj = support[supportKeys[i]];
         (supported = supported && obj.supported), obj.supported || $("#unsupp_reasons").append("<li>" + obj.message + "</li>");
     }
@@ -1950,129 +1897,124 @@ function theme(a) {
 	document.getElementById("theme").innerHTML = a
 }
 
-window.onload = function () {	
-	$.contextMenu({
-		selector: "#content",
-		items: {
-			changelog: {
-				name: "See Changelog",
-				callback: function () { socket.emit("command", { list: ["changelog"] }) }
-			},
-			commands: {
-				name: "Quick Commands",
-				items: {
-					triggered: { name: "Triggered", callback: function () { socket.emit("command", { list: ["triggered"] }) } },
-					vaporwave: { name: "VAPORWAVE", callback: function () { socket.emit("command", { list: ["vaporwave"] }) } },
-					backflip: { name: "Backflip", callback: function () { socket.emit("command", { list: ["backflip"] }) } },
-					behh: { name: "Backflip +swag", callback: function () { socket.emit("command", { list: ["backflip", "swag"] }) } },
-					swag: { name: "Swag", callback: function () { socket.emit("command", { list: ["swag"] }) } },
-				}
-			},
-			settings: function(){
-				const obj = {};
-				for (const key in settings) {
-					obj[key] = {	
-						name: settings[key].name,
-						type: "checkbox",
-						events: {
-							click: function () {
-								settings[key].value = !settings[key].value
-							}
-						}
-					}
-				}
-				return {
-					name: "Settings",
-					items: obj,
-				}
-			}(),
-		},
-		events: {
-			show: function (opt) {
-				for (const key in settings) {
-					opt.inputs[key].selected = settings[key].value
-				}
-			}
-		}
-	}),
-	$.contextMenu({
-		selector: "#page_login",
-		items: {
-			changelog: {
-				name: "See Changelog",
-				callback: function () { $('#page_changelog').show() }
-			},
-			settings: function(){
-				const obj = {};
-				for (const key in settings) {
-					obj[key] = {	
-						name: settings[key].name,
-						type: "checkbox",
-						events: {
-							click: function () {
-								settings[key].value = !settings[key].value
-							}
-						}
-					}
-				}
-				return {
-					name: "Settings",
-					items: obj,
-				}
-			}(),
-		},
-		events: {
-			show: function (opt) {
-				for (const key in settings) {
-					opt.inputs[key].selected = settings[key].value
-				}
-			}
-		}
-	}),
-	$.contextMenu({
-		selector: "#themes_btn",
-			items: {
-				default: { name: "Default", callback: function () { theme('') } },
-                custom: {name: "Custom", callback: function() {var url = prompt('Insert Supported Image URL for usage as the Background',`${window.location.origin}/img/desktop/__Themes/XP/wallpaper-xp.jpg`); if(getCookie("custom_theme") == ''){if(url == "") {setCookie("custom_theme", "None", 365)} else {setCookie("custom_theme", `${encodeURIComponent(url)}`, 365)}} else {if(url == "") {setCookie("custom_theme", "None", 365)} else {setCookie("custom_theme", `${encodeURIComponent(url)}`, 365)}}; if (url == "") {theme()}; if (url) {theme(`#content{background-image:url("./img/desktop/logo.png"), url("${url}"); background-repeat: no-repeat, repeat; background-size: auto, cover;}'`) }} },
-				bonziverse: { name: "BonziVERSE", callback: function () { theme('#content{background-color:black;background:url("./img/desktop/__Themes/BonziVERSE/logo-verse.png"), url("./img/desktop/__Themes/BonziVERSE/bonzi-verse.png"), url("./img/desktop/__Themes/BonziVERSE/wallpaper-verse.jpg");background-repeat: no-repeat; background-position: top left, center, center; background-size: auto, auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/BonziVERSE/taskbar-verse.png")}#chat_tray{display:none}#chat_send{background:url("./img/desktop/__Themes/BonziVERSE/start-verse.png")') } },
-				vaporwave: { name: "Vaporwave", callback: function () { theme('#chat_log{margin-bottom:28px!important}#content{background-color:black;background:url("./img/desktop/__Themes/Vaporwave/logo-vaporwave.png"), url("./img/desktop/__Themes/Vaporwave/bonzi-vaporwave.png"), url("./img/desktop/__Themes/Vaporwave/wallpaper-vaporwave.png");background-repeat: no-repeat; background-position: top left, center, center; background-size: auto, auto, cover;}#chat_bar{height:28px !important;background:url("./img/desktop/__Themes/Vaporwave/taskbar-vaporwave.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Vaporwave/tray_left-vaporwave.png"),url("./img/desktop/__Themes/Vaporwave/tray_right-vaporwave.png"),url("./img/desktop/__Themes/Vaporwave/tray-vaporwave.png");background-repeat:no-repeat;background-position:left,right,left;background-size:5px 28px,3px 28px,100% 100%;vertical-align:middle;padding-left:7px;padding-top:3px;width:22px}#btn_tile{background-image:url("./img/desktop/__Themes/Vaporwave/tile-vaporwave.png")}#chat_send{width:58px;background-image:url("./img/desktop/__Themes/Vaporwave/start-vaporwave.png");background-size:100%;background-repeat:no-repeat;box-sizing:border-box;color:#000;font-family:"MS Sans Serif",Tahoma,sans-serif;font-style:normal;font-weight:700;letter-spacing:1px;font-size:11px;text-shadow:none;padding-left:21px;text-transform:capitalize}#chat_send:hover{background-position:0 -28px !important}#chat_send:active{background-position:0 -56px !important}'); var vaporwave_98 = new Audio("./sfx/ui/win9x/vaporwave.mp3"); vaporwave_98.play() } },
-				dark: { name: "Dark Mode", callback: function () { theme('::selection {background: #a6a6a68c !important}#arcade_label, #themes_label img {filter: grayscale(100%)}#chat_log_list::-webkit-scrollbar-thumb {background-color: #414141 !important;border: 2px solid #393939 !important}#chat_log {background-color: rgb(31 31 31 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #5d5d5d !important}#chat_log #chat_log_list ul li.bonzi-message.bonzi-event {color: #4c4c4c !important}#chat_log #chat_log_header .clh-col#chat_log_controls ul li {color: #3d3d3d !important}input[type="text"]{background-color:#151515!important;border:1px #676767!important;color:#9d9d9ded!important}#chat_bar{background-image:url("./img/desktop/__Themes/Dark/taskbar-dark.png")}#chat_send{background-image:url("./img/desktop/__Themes/Dark/start-dark.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Dark/tray_left-dark.png"), url("./img/desktop/__Themes/Dark/tray-dark.png")}#content{background-color:black;background-image:url("./img/desktop/__Themes/Dark/logo-dark.png"), url("./img/desktop/__Themes/Dark/bonzi-dark.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, auto;}.xp_dialog,.message_cont,.message_cont_arcade,.message_cont_pinball,.message_cont_solitaire{background:#090909;color:#b9b9b9;border:#363636 solid 1px}') } },
-				light: { name: "Light Mode", callback: function () { theme('::selection {background: #7070708c !important}#arcade_label, #themes_label img {filter: grayscale(100%)}#chat_log_list::-webkit-scrollbar-thumb {background-color: #676767 !important;border: 2px solid #787878 !important}#chat_log {background-color: rgb(114 114 114 / 45%) !important;color: #090909 !important;border-top: solid 1px #7e7e7e !important}#chat_log #chat_log_header {border-bottom: 1px solid #636363 !important}#chat_log #chat_log_list ul li.bonzi-message span.body {color: #232323 !important}#chat_log #chat_log_list ul li.bonzi-message.bonzi-event .timestamp {color: #121212 !important}#chat_log #chat_log_header .clh-col#chat_log_controls ul li {color: #3d3d3d !important}#chat_log #chat_log_header .clh-col#chat_log_controls ul li:hover {color: #2b2b2b !important}#room_info,#arcade_label,#themes_label{color:rgb(12 12 12 / 50%)!important}#chat_bar{background-image:url("./img/desktop/__Themes/Light/taskbar-light.png")}#chat_send{background-image:url("./img/desktop/__Themes/Light/start-light.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Light/tray_left-light.png"), url("./img/desktop/__Themes/Light/tray-light.png")}#content{background-color:white;background-image:url("./img/desktop/logo.png"), url("./img/desktop/__Themes/Light/bonzi-light.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, auto;}.xp_dialog,.message_cont,.message_cont_arcade,.message_cont_pinball,.message_cont_solitaire{background:#f5f5f5;color:#2f2f2f;border:#424242 solid 1px}') } },
-				super_acid: { name: "Super Acid", callback: function () { theme('@keyframes sex{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}input[type="text"]{background-color:#eddaff!important;border:1px inset #ffd5d5!important;color:#c900b1e8!important}.xp_bubble,.bubble{color:#0048dae6!important;border:#72ffd1 solid 1px!important}.bonzi_user{border:#72ffd1 solid 1px!important;color:#0048dae6!important}.bonzi.bubble.close-bubble{color: #dd2cff!important}body{animation:sex 1s linear infinite}') } },
-				terminal:{name:"TERMINAL",callback:function(){theme('#arcade_label, #themes_label img {filter: grayscale(100%)}#chat_log_list::-webkit-scrollbar-thumb {background-color: #3c3b3b !important;border: 1px solid #37721f !important}#dm_input {background-color: #000 !important;border-color: #398226 !important}input[type="checkbox"], input[type="radio"]  {filter: hue-rotate(249deg) !important}input[type="checkbox"]:hover, input[type="radio"]:hover  {filter: hue-rotate(232deg) !important}::selection {background: #0937098c !important}.context-menu-list {background: #2f9f1f !important;border: 1px solid #4ed82b !important}.context-menu-item {background-color: #040404 !important}.context-menu-hover {background-color: #0a2709 !important}.xp_dialog, .message_cont, .message_cont_arcade, .message_cont_readme, .message_cont_rules {background: #070707 !important;color: #1e6817 !important;-webkit-border-radius: 7px !important;-moz-border-radius: 7px !important;border-radius: 7px !important;border: #205312 solid 1px !important}button {border: 1px solid #227500 !important;background: linear-gradient(180deg, #0c4115, #000000 86%, #000000) !important}button:not(:disabled):hover  {box-shadow: inset -1px 1px #e0ffd1, inset 1px 2px #9efd86, inset -2px 2px #66fb60, inset 2px -2px #2ae619 !important}button.focused, button:focus  {box-shadow: inset -1px 1px #d6ffcc, inset 1px 2px #99ea99, inset -2px 2px #c3f5bc, inset 1px -1px #a1e58b, inset 2px -2px #b0e58b !important}#chat_log {background-color: rgb(31 31 31 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #1c6f20 !important}#chat_log #chat_log_list ul li.bonzi-message.bonzi-event {color: #4c4c4c !important}#chat_log #chat_log_header .clh-col#chat_log_controls ul li {color: #3d3d3d !important}input[type="text"]{background-color:#151515!important;border:1px #676767!important;color:#9d9d9ded!important}.bubble,.bonzi_user,.bubble::after{background:0!important;border:0}*{color:green!important;font-family:monospace!important}#content{background:#000}.bubble-content::before{content:"> "}.bonzi_user{padding:0;position:static}.bubble{overflow:visible}.bubble-left{right:0px}input[type=text]{background-color:#000;border:0}#chat_send,#chat_tray{display:none}#chat_bar{background:0}')}},
-				xp: {
-					name: "Windows XP", 
-					items: {
-						default_xp : { name: "Default", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #5cb742 !important;border: 2px solid #50962d !important}#chat_log {background-color: rgb(57 120 13 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #589a2a !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/wallpaper-xp.jpg");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/taskbar-xp.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/tray_left-xp.png"), url("./img/desktop/__Themes/XP/tray-xp.png")}#chat_send{background:url("./img/desktop/__Themes/XP/start-xp.png")}'); var winxp_tada = new Audio("./sfx/ui/winxp/tada.mp3"); winxp_tada.play() } },
-						space: { name: "Space", callback: function () { theme('#chat_log_list::-webkit-scrollbar-thumb {background-color: #5988b6 !important;border: 2px solid #4470ad !important}#chat_log {background-color: rgb(13 73 120 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #33578d !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Space/wallpaper-space.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Space/taskbar-space.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Space/tray_left-space.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Space/tray-space.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Space/start-space.png")}') } },
-						aquarium: { name: "Aquarium", callback: function () { theme('#chat_log_list::-webkit-scrollbar-thumb {background-color: #59b6af !important;border: 2px solid #44a2ad !important}#chat_log {background-color: rgb(13 120 83 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #389295 !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/wallpaper-aquarium.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/taskbar-aquarium.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/tray_left-aquarium.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/tray-aquarium.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/start-aquarium.png")}') } },
-						nature: { name: "Nature", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #4ac244 !important;border: 2px solid #42ac3e !important}#chat_log {background-color: rgb(68 196 43 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #6bd756 !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/wallpaper-nature.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/taskbar-nature.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/tray_left-nature.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/tray-nature.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/start-nature.png")}') } },
-						davinci: { name: "Da Vinci", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #6d5335 !important;border: 2px solid #774d28 !important}#chat_log {background-color: rgb(119 70 25 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #b57942 !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/wallpaper-davinci.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/taskbar-davinci.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/tray_left-davinci.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/tray-davinci.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/start-davinci.png")}') } },
-						zune: { name: "Zune", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #6d5335 !important;border: 2px solid #774d28 !important}#chat_log {background-color: rgb(119 70 25 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #b57942 !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/wallpaper-zune.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/taskbar-zune.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/tray_left-zune.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/tray-zune.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/start-zune.png")}') } },
-						embedded: { name: "Embedded POS Ready", callback: function () { theme('#chat_log_list::-webkit-scrollbar-thumb {background-color: #5988b6 !important;border: 2px solid #4470ad !important}#chat_log {background-color: rgb(41 62 87 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #275f6b !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/wallpaper-embed.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/taskbar-embed.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/tray_left-embed.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/tray-embed.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/start-embed.png")}') } },
-						royale: { name: "Royale", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #5cb742 !important;border: 2px solid #50962d !important}#chat_log {background-color: rgb(57 120 13 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #589a2a !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Royale/wallpaper-royale.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale/taskbar-royale.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/royale/tray_left-royale.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Royale/tray-royale.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale/start-royale.png")}') } },
-						royale_noir: { name: "Royale Noir", callback: function () { theme('#chat_log_list::-webkit-scrollbar-thumb {background-color: #5988b6 !important;border: 2px solid #4470ad !important}#chat_log {background-color: rgb(41 62 87 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #275f6b !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/wallpaper-royalenoir.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/taskbar-royalenoir.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/tray_left-royalenoir.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/tray-royalenoir.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/start-royalenoir.png")}') } }
-
-					}
-				},
-				aero: { name: "Aero", callback: function () { theme('::selection {background: #7070708c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #598bb6 !important;border: 2px solid #446ead !important}button:not(:disabled):hover  {box-shadow: none !important}button.focused, button:focus  {box-shadow: none !important}#chat_log {background-color: rgb(13 51 120 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #469bca !important}#content{background:url("./img/desktop/logo.png"), url("./img/desktop/__Themes/Aero/wallpaper-aero.jpg");background-position: top left, center; background-repeat: no-repeat; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/Aero/taskbar-aero.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Aero/tray_left-aero.png"), url("./img/desktop/__Themes/Aero/tray-aero.png")}#btn_tile{background-image:url("./img/desktop/__Themes/Aero/tile-aero.png")}#chat_send{background:url("./img/desktop/__Themes/Aero/start-aero.png")}.bubble-content.page.message_cont::-webkit-scrollbar{width:16px}.bubble-content.page.message_cont::-webkit-scrollbar:horizontal{height:17px}.bubble-content.page.message_cont::-webkit-scrollbar-corner{background:#eee}.bubble-content.page.message_cont::-webkit-scrollbar-track:vertical{background:linear-gradient(90deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-track:horizontal{background:linear-gradient(180deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-thumb{background-color:#eee;border:1.5px solid #888;border-radius:3px;box-shadow:inset 0 -1px 1px hsla(0,0%,100%,0.8),inset 0 1px 1px #fff}.bubble-content.page.message_cont::-webkit-scrollbar-thumb:vertical{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAIAAADpZ+PpAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAADrSURBVChTTc5LboJQGAXguyoCu4ERCzAGlRk7UOwGWIDh0s4M4kxb06RSq/jAB6AxJkJ4lTDrue3AnvyzP+fLId+/yfM8juP7PQmCCOf7B3e+ZD+O40RRVFW12VQUpd3r9U3T2m4OpKoqWZYNwzBZLEqfh0N7NnvfrPcEWlEUWZb9mWF4Ph6D0ylcLbfM5HkeJrhGA2hb15/QXnv+w7RYXsDatjOdvnmrHSnLEizMNE2v11sUXQBCnn98kbquBUGQJAlmq9WB2e3qg4HJdqKkaRql1HGc0WgMcDJ5dd0F24kediZJ8t/ELT69H+8py0CYSIO5AAAAAElFTkSuQmCC) no-repeat 50%,linear-gradient(90deg,#eee 45%,#ddd 0,#bbb)}.bubble-content.page.message_cont::-webkit-scrollbar-thumb:horizontal{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAJCAYAAAALpr0TAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAADcSURBVChTNZBLqoUwEEQrURQUxZGCvy24ACfiityJi7tv8GauQoPxk5tquA2RQ9vVVYk6z9NZaxFFEe77htYazjk8z4MwDIVZ+rourOuKaZrwvi+WZcE8z1BKCbPPCjk4DAO2bRP1OI7wLiL6Mbd7J408z1GWpQwWRYGqqiQG+03TgMu0MacfUN4qANmn8UOv9MjW3sKaSm7iIdOSlziOQ3LScd93aPonSYK6riVLlmVo21aYfVqzND9pmqLrOlGT+76XbcxLZkb19/l3fEP+oF0cx8KMEASBsDEGX2/CgZCHkg+8AAAAAElFTkSuQmCC) no-repeat 50%,linear-gradient(180deg,#eee 45%,#ddd 0,#bbb)}.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal:end:increment,.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal:start:decrement,.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical:end:increment,.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical:start:decrement{display:block}.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical{height:17px}.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical:start{background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik04IDZIN3YxSDZ2MUg1djFINHYxaDdWOWgtMVY4SDlWN0g4VjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(90deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical:end{background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0xMSA2SDR2MWgxdjFoMXYxaDF2MWgxVjloMVY4aDFWN2gxVjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(90deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal{width:16px}.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal:start{background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIxMDAlIiB4Mj0iMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik05IDRIOHYxSDd2MUg2djFINXYxaDF2MWgxdjFoMXYxaDFWNFoiIGZpbGw9InVybCgjYSkiLz48L3N2Zz4=),linear-gradient(180deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal:end{background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIxMDAlIiB4Mj0iMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik03IDRINnY3aDF2LTFoMVY5aDFWOGgxVjdIOVY2SDhWNUg3VjRaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(180deg,#e5e5e5,#f0f0f0 20%)}.bubble{padding:0;width:197px;background:linear-gradient(180deg,#fff,#ddd);border:1px solid rgba(0,0,0,0.4);border-radius:3px;box-shadow:5px 5px 3px -3px rgba(0,0,0,0.4);position:absolute}.bubble-left{right:-45px;top:40px}.bubble-left::after{background-image:url("./img/desktop/__Themes/Aero/bubble/bubble_tail_l.png");width:22px;height:14px;top:12px;right:-22px}.bubble-right{top:40px;left:155px}.bubble-right::after{background-image:url("./img/desktop/__Themes/Aero/bubble/bubble_tail_r.png");width:22px;height:14px;top:12px;left:-22px}.bubble-bottom{top:156px}.bubble-bottom::after{background-image:url("./img/desktop/__Themes/Aero/bubble/bubble_tail_b.png");width:28px;height:22px;top:-22px;left:26px}.bubble-top{bottom:4px}.bubble-top::after{background-image:url("./img/desktop/__Themes/Aero/bubble/bubble_tail_t.png");width:28px;height:22px;left:110px}.bonzi_name{border:1px solid rgba(0,0,0,0.4);background:linear-gradient(180deg,#fff,#ddd);box-shadow:5px 5px 3px -3px rgba(0,0,0,0.4);color:#000}.bonzi_user{border:1px solid rgba(0,0,0,0.4);background:linear-gradient(180deg,#fff,#ddd);box-shadow:5px 5px 3px -3px rgba(0,0,0,0.4);color:#000}.btn{margin-right:10px;border-radius:3px;border:1px solid #ddd;padding:3px 15px;background:#f2f2f2;background:-moz-linear-gradient(top,#f2f2f2 0%,#ebebeb 42%,#ddd 47%,#cfcfcf 100%);background:-webkit-linear-gradient(top,#f2f2f2 0%,#ebebeb 42%,#ddd 47%,#cfcfcf 100%);background:linear-gradient(to bottom,#f2f2f2 0%,#ebebeb 42%,#ddd 47%,#cfcfcf 100%);filter:progid: DXImageTransform.Microsoft.gradient(startColorstr="#f2f2f2",endColorstr="#cfcfcf",GradientType=0);transition:all .1s ease-in;border:1px solid #707070}.btn:hover,.btn:focus{outline:0;background:#eaf6fd;background:-moz-linear-gradient(top,#eaf6fd 0%,#d9f0fc 42%,#bee6fd 47%,#bce5fc 58%,#a7d9f5 100%);background:-webkit-linear-gradient(top,#eaf6fd 0%,#d9f0fc 42%,#bee6fd 47%,#bce5fc 58%,#a7d9f5 100%);background:linear-gradient(to bottom,#eaf6fd 0%,#d9f0fc 42%,#bee6fd 47%,#bce5fc 58%,#a7d9f5 100%);filter:progid: DXImageTransform.Microsoft.gradient(startColorstr="#eaf6fd",endColorstr="#a7d9f5",GradientType=0);border:1px solid #3C7FB1;box-shadow:0 0 3px #A7D9F5;-o-box-shadow:0 0 3px #A7D9F5;-webkit-box-shadow:0 0 3px #A7D9F5;-moz-box-shadow:0 0 3px #A7D9F5}.btn:active{box-shadow:inset 0 -1px 6px rgba(0,0,0,0.2),inset 0 -.7em #BEE6FD,0 0 3px #A7D9F5;-o-box-shadow:inset 0 -1px 6px rgba(0,0,0,0.2),inset 0 -.7em #BEE6FD,0 0 3px #A7D9F5;-webkit-box-shadow:inset 0 -1px 6px rgba(0,0,0,0.2),inset 0 -.7em #BEE6FD,0 0 3px #A7D9F5;-moz-box-shadow:inset 0 -1px 6px rgba(0,0,0,0.2),inset 0 -.7em #BEE6FD,0 0 3px #A7D9F5}.context-menu-root{background:linear-gradient(#fff 20%,#f1f4fa 25%,#f1f4fa 43%,#d4dbee 48%,#e6eaf6);border-radius:5px;border:4px solid transparent}.context-menu-icon.context-menu-hover:before{color:#fff}.context-menu-icon.context-menu-disabled::before{color:#8c8c8c}.context-menu-icon.context-menu-icon--fa{display:list-item}.context-menu-icon.context-menu-icon--fa.context-menu-hover:before{color:#fff}.context-menu-icon.context-menu-icon--fa.context-menu-disabled::before{color:#8c8c8c}.context-menu-list{backdrop-filter:blur(7px) brightness(1.25);background:linear-gradient(#fff 20%,#f1f4fa 25%,#f1f4fa 43%,#d4dbee 48%,#e6eaf6);border:4px solid transparent;border-radius:5px;box-shadow:inset 1px 0 rgba(0,0,0,0.15),inset -1px 0 #fff;font-family:Segoe UI,sans-serif;font-size:11px;display:inline-block;list-style-type:none;margin:0;max-width:none;min-width:none;position:absolute}.context-menu-item{border:1px solid transparent;background-color:linear-gradient(#fff 20%,#f1f4fa 25%,#f1f4fa 43%,#d4dbee 48%,#e6eaf6);color:#000;padding:5px 22px;position:relative;user-select:none}.context-menu-item:hover{border-radius:3px;backdrop-filter:blur(7px) brightness(1.25);opacity:87%;border:1px solid rgba(0,0,0,0.4);background:linear-gradient(180deg,hsla(0,0%,100%,0.5),rgba(184,214,251,0.5) 60%,rgba(184,214,251,0.5) 90%,hsla(0,0%,100%,0.8));border-color:#b8d6fb}.context-menu-separator{background:linear-gradient(#fff 20%,#f1f4fa 25%,#f1f4fa 43%,#d4dbee 48%,#e6eaf6);border-bottom:1px solid #aca899;margin:1px 2.5px;padding:0}.context-menu-item > label > input,.context-menu-item > label > textarea{user-select:text}.context-menu-item.context-menu-hover{background-color:#8931c4;color:#fff;cursor:pointer}.context-menu-item.context-menu-disabled{background-color:#fff;color:#8c8c8c;cursor:default}.context-menu-input.context-menu-hover{background-color:#eee;cursor:default}.context-menu-submenu:after{content:"";border-style:solid;border-width:.25em 0 .25em .25em;border-color:transparent transparent transparent #000;height:0;position:absolute;right:.5em;top:50%;transform:translateY(-50%);width:0;z-index:1}.context-menu-item.context-menu-input{padding:.3em .6em}.context-menu-input > label > *{vertical-align:top}.context-menu-input > label > input[type="checkbox"],.context-menu-input > label > input[type="radio"]{margin-right:.4em;position:relative;top:.12em}.context-menu-input > label{margin:0}.context-menu-input > label,.context-menu-input > label > input[type="text"],.context-menu-input > label > textarea,.context-menu-input > label > select{box-sizing:border-box;display:block;width:100%}.context-menu-input > label > textarea{height:7em}.context-menu-item > .context-menu-list{display:none;border:1.5px solid #888;border-radius:3px;right:-.3em;top:.3em}.context-menu-item.context-menu-visible > .context-menu-list{display:block}.context-menu-accesskey{text-decoration:underline}select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0xMSA2SDR2MWgxdjFoMXYxaDF2MWgxVjloMVY4aDFWN2gxVjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(180deg,#eee 45%,#ddd 0,#bbb);background-position:100%;background-repeat:no-repeat;border:1.5px solid #888;border-radius:3px;box-shadow:inset 0 -1px 1px hsla(0,0%,100%,0.8),inset 0 1px 1px #fff;box-sizing:border-box;font:9pt Segoe UI,sans-serif;padding:2px 30px 2px 3px;position:relative}select:hover{background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0xMSA2SDR2MWgxdjFoMXYxaDF2MWgxVjloMVY4aDFWN2gxVjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(180deg,#e5f4fd 45%,#b3e0f9 0);border-color:#72a2c5}select:focus{background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0xMSA2SDR2MWgxdjFoMXYxaDF2MWgxVjloMVY4aDFWN2gxVjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(180deg,#cee9f8 45%,#86c6e8 0);border-color:#6d91ab;box-shadow:unset;outline:none}.xp_bubble,.bubble{background:linear-gradient(180deg,#fff,#ddd);color:#000;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;box-shadow:5px 5px 3px -3px rgba(0,0,0,0.4);border:1px solid rgba(0,0,0,0.4)}#skid_cont,#ban_cont,#kick_cont,.message_cont,.message_cont_arcade,#aboutme_cont,#unsupp_cont,#error_cont,#b_alert,.xp_dialog{background:rgba(#fff,#fff,#fff,0.9);-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;color:#d6e6ff;opacity:97%;backdrop-filter:blur(6px) brightness(1.25)}.xp_dialog,.message_cont,.message_cont_arcade,.message_cont_pinball,.message_cont_solitaire{border:1px solid rgba(0,0,0,0.725);outline:5px;background:rgba(#fff,#fff,#fff,0.9);background-color:rgba(#fff,#fff,#fff,0.9);-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;color:#d6e6ff;opacity:97%;backdrop-filter:blur(6px) brightness(1.25);box-shadow:0 0 0 1px rgba(255,255,255,0.5) inset,0 0 10px rgba(0,0,0,0.75);background-blend-mode:overlay;background-attachment:fixed;background-repeat:no-repeat;transform:translateZ(0x);background-size:100vw 100vh;transition:background-color 125ms ease-in-out;will-change:backdrop-filter,background-color}#page_warning_login,#page_reboot,#page_error,#page_ban,#page_skiddie,#page_unsupp,#page_arcade_menu,#page_aboutme,#page_pinball,#page_solitaire,.message_cont,.message_cont_arcade{background-color:rgba(0,0,0,0.5)}'); var win7_startup = new Audio("./sfx/ui/win7/startup.mp3"); win7_startup.play() } }
+window.onload = () => {
+    $.contextMenu({
+        selector: "#content",
+        items: {
+            changelog: {
+                name: "See Changelog",
+                callback: () => { socket.emit("command", { list: ["changelog"] })}
+            },
+            commands: {
+                name: "Quick Commands",
+                items: {
+                    triggered: { name: "Triggered", callback: () => { socket.emit("command", { list: ["triggered"] })} },
+                    vaporwave: { name: "VAPORWAVE", callback: () => { socket.emit("command", { list: ["vaporwave"] })} },
+                    backflip: { name: "Backflip", callback: () => { socket.emit("command", { list: ["backflip"] })} },
+                    behh: { name: "Backflip +swag", callback: () => { socket.emit("command", { list: ["backflip", "swag"] })} },
+                    swag: { name: "Swag", callback: () => { socket.emit("command", { list: ["swag"] })} },
+                }
+            },
+            settings: () => {
+                const obj = {};
+                for (const key in settings) {
+                    obj[key] = {
+                        name: settings[key].name,
+                        type: "checkbox",
+                        events: {
+                            click: () => {
+                                settings[key].value = !settings[key].value;
+                            }
+                        }
+                    };
+                }
+                return {
+                    name: "Settings",
+                    items: obj,
+                };
+            },
+        },
+        events: {
+            show: (opt) => {
+                for (const key in settings) {
+                    opt.inputs[key].selected = settings[key].value;
+                }
             }
-	}),
-	$("#dm_input").keypress(n => {
-		if (n.which == 13) dm_send()
-	})
+        }
+    }),
+        $.contextMenu({
+            selector: "#page_login",
+            items: {
+                changelog: {
+                    name: "See Changelog",
+                    callback: () => { $('#page_changelog').show()}
+                },
+                settings: () => {
+                    const obj = {};
+                    for (const key in settings) {
+                        obj[key] = {
+                            name: settings[key].name,
+                            type: "checkbox",
+                            events: {
+                                click: () => {
+                                    settings[key].value = !settings[key].value;
+                                }
+                            }
+                        };
+                    }
+                    return {
+                        name: "Settings",
+                        items: obj,
+                    };
+                },
+            },
+            events: {
+                show: (opt) => {
+                    for (const key in settings) {
+                        opt.inputs[key].selected = settings[key].value;
+                    }
+                }
+            }
+        }),
+        $.contextMenu({
+            selector: "#themes_btn",
+            items: {
+                default: { name: "Default", callback: function () { theme(''); } },
+                custom: { name: "Custom", callback: function () { var url = prompt('Insert Supported Image URL for usage as the Background', `${window.location.origin}/img/desktop/__Themes/XP/wallpaper-xp.jpg`); if (getCookie("custom_theme") == '') { if (url == "") { setCookie("custom_theme", "None", 365); } else { setCookie("custom_theme", `${encodeURIComponent(url)}`, 365); } } else { if (url == "") { setCookie("custom_theme", "None", 365); } else { setCookie("custom_theme", `${encodeURIComponent(url)}`, 365); } }; if (url == "") { theme(); }; if (url) { theme(`#content{background-image:url("./img/desktop/logo.png"), url("${url}"); background-repeat: no-repeat, repeat; background-size: auto, cover;}'`); } } },
+                bonziverse: { name: "BonziVERSE", callback: function () { theme('#content{background-color:black;background:url("./img/desktop/__Themes/BonziVERSE/logo-verse.png"), url("./img/desktop/__Themes/BonziVERSE/bonzi-verse.png"), url("./img/desktop/__Themes/BonziVERSE/wallpaper-verse.jpg");background-repeat: no-repeat; background-position: top left, center, center; background-size: auto, auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/BonziVERSE/taskbar-verse.png")}#chat_tray{display:none}#chat_send{background:url("./img/desktop/__Themes/BonziVERSE/start-verse.png")'); } },
+                vaporwave: { name: "Vaporwave", callback: function () { theme('#chat_log{margin-bottom:28px!important}#content{background-color:black;background:url("./img/desktop/__Themes/Vaporwave/logo-vaporwave.png"), url("./img/desktop/__Themes/Vaporwave/bonzi-vaporwave.png"), url("./img/desktop/__Themes/Vaporwave/wallpaper-vaporwave.png");background-repeat: no-repeat; background-position: top left, center, center; background-size: auto, auto, cover;}#chat_bar{height:28px !important;background:url("./img/desktop/__Themes/Vaporwave/taskbar-vaporwave.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Vaporwave/tray_left-vaporwave.png"),url("./img/desktop/__Themes/Vaporwave/tray_right-vaporwave.png"),url("./img/desktop/__Themes/Vaporwave/tray-vaporwave.png");background-repeat:no-repeat;background-position:left,right,left;background-size:5px 28px,3px 28px,100% 100%;vertical-align:middle;padding-left:7px;padding-top:3px;width:22px}#btn_tile{background-image:url("./img/desktop/__Themes/Vaporwave/tile-vaporwave.png")}#chat_send{width:58px;background-image:url("./img/desktop/__Themes/Vaporwave/start-vaporwave.png");background-size:100%;background-repeat:no-repeat;box-sizing:border-box;color:#000;font-family:"MS Sans Serif",Tahoma,sans-serif;font-style:normal;font-weight:700;letter-spacing:1px;font-size:11px;text-shadow:none;padding-left:21px;text-transform:capitalize}#chat_send:hover{background-position:0 -28px !important}#chat_send:active{background-position:0 -56px !important}'); var vaporwave_98 = new Audio("./sfx/ui/win9x/vaporwave.mp3"); vaporwave_98.play(); } },
+                dark: { name: "Dark Mode", callback: function () { theme('::selection {background: #a6a6a68c !important}#arcade_label, #themes_label img {filter: grayscale(100%)}#chat_log_list::-webkit-scrollbar-thumb {background-color: #414141 !important;border: 2px solid #393939 !important}#chat_log {background-color: rgb(31 31 31 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #5d5d5d !important}#chat_log #chat_log_list ul li.bonzi-message.bonzi-event {color: #4c4c4c !important}#chat_log #chat_log_header .clh-col#chat_log_controls ul li {color: #3d3d3d !important}input[type="text"]{background-color:#151515!important;border:1px #676767!important;color:#9d9d9ded!important}#chat_bar{background-image:url("./img/desktop/__Themes/Dark/taskbar-dark.png")}#chat_send{background-image:url("./img/desktop/__Themes/Dark/start-dark.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Dark/tray_left-dark.png"), url("./img/desktop/__Themes/Dark/tray-dark.png")}#content{background-color:black;background-image:url("./img/desktop/__Themes/Dark/logo-dark.png"), url("./img/desktop/__Themes/Dark/bonzi-dark.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, auto;}.xp_dialog,.message_cont,.message_cont_arcade,.message_cont_pinball,.message_cont_solitaire{background:#090909;color:#b9b9b9;border:#363636 solid 1px}'); } },
+                light: { name: "Light Mode", callback: function () { theme('::selection {background: #7070708c !important}#arcade_label, #themes_label img {filter: grayscale(100%)}#chat_log_list::-webkit-scrollbar-thumb {background-color: #676767 !important;border: 2px solid #787878 !important}#chat_log {background-color: rgb(114 114 114 / 45%) !important;color: #090909 !important;border-top: solid 1px #7e7e7e !important}#chat_log #chat_log_header {border-bottom: 1px solid #636363 !important}#chat_log #chat_log_list ul li.bonzi-message span.body {color: #232323 !important}#chat_log #chat_log_list ul li.bonzi-message.bonzi-event .timestamp {color: #121212 !important}#chat_log #chat_log_header .clh-col#chat_log_controls ul li {color: #3d3d3d !important}#chat_log #chat_log_header .clh-col#chat_log_controls ul li:hover {color: #2b2b2b !important}#room_info,#arcade_label,#themes_label{color:rgb(12 12 12 / 50%)!important}#chat_bar{background-image:url("./img/desktop/__Themes/Light/taskbar-light.png")}#chat_send{background-image:url("./img/desktop/__Themes/Light/start-light.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Light/tray_left-light.png"), url("./img/desktop/__Themes/Light/tray-light.png")}#content{background-color:white;background-image:url("./img/desktop/logo.png"), url("./img/desktop/__Themes/Light/bonzi-light.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, auto;}.xp_dialog,.message_cont,.message_cont_arcade,.message_cont_pinball,.message_cont_solitaire{background:#f5f5f5;color:#2f2f2f;border:#424242 solid 1px}'); } },
+                super_acid: { name: "Super Acid", callback: function () { theme('@keyframes sex{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}input[type="text"]{background-color:#eddaff!important;border:1px inset #ffd5d5!important;color:#c900b1e8!important}.xp_bubble,.bubble{color:#0048dae6!important;border:#72ffd1 solid 1px!important}.bonzi_user{border:#72ffd1 solid 1px!important;color:#0048dae6!important}.bonzi.bubble.close-bubble{color: #dd2cff!important}body{animation:sex 1s linear infinite}'); } },
+                terminal: { name: "TERMINAL", callback: function () { theme('#arcade_label, #themes_label img {filter: grayscale(100%)}#chat_log_list::-webkit-scrollbar-thumb {background-color: #3c3b3b !important;border: 1px solid #37721f !important}#dm_input {background-color: #000 !important;border-color: #398226 !important}input[type="checkbox"], input[type="radio"]  {filter: hue-rotate(249deg) !important}input[type="checkbox"]:hover, input[type="radio"]:hover  {filter: hue-rotate(232deg) !important}::selection {background: #0937098c !important}.context-menu-list {background: #2f9f1f !important;border: 1px solid #4ed82b !important}.context-menu-item {background-color: #040404 !important}.context-menu-hover {background-color: #0a2709 !important}.xp_dialog, .message_cont, .message_cont_arcade, .message_cont_readme, .message_cont_rules {background: #070707 !important;color: #1e6817 !important;-webkit-border-radius: 7px !important;-moz-border-radius: 7px !important;border-radius: 7px !important;border: #205312 solid 1px !important}button {border: 1px solid #227500 !important;background: linear-gradient(180deg, #0c4115, #000000 86%, #000000) !important}button:not(:disabled):hover  {box-shadow: inset -1px 1px #e0ffd1, inset 1px 2px #9efd86, inset -2px 2px #66fb60, inset 2px -2px #2ae619 !important}button.focused, button:focus  {box-shadow: inset -1px 1px #d6ffcc, inset 1px 2px #99ea99, inset -2px 2px #c3f5bc, inset 1px -1px #a1e58b, inset 2px -2px #b0e58b !important}#chat_log {background-color: rgb(31 31 31 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #1c6f20 !important}#chat_log #chat_log_list ul li.bonzi-message.bonzi-event {color: #4c4c4c !important}#chat_log #chat_log_header .clh-col#chat_log_controls ul li {color: #3d3d3d !important}input[type="text"]{background-color:#151515!important;border:1px #676767!important;color:#9d9d9ded!important}.bubble,.bonzi_user,.bubble::after{background:0!important;border:0}*{color:green!important;font-family:monospace!important}#content{background:#000}.bubble-content::before{content:"> "}.bonzi_user{padding:0;position:static}.bubble{overflow:visible}.bubble-left{right:0px}input[type=text]{background-color:#000;border:0}#chat_send,#chat_tray{display:none}#chat_bar{background:0}'); } },
+                xp: {
+                    name: "Windows XP",
+                    items: {
+                        default_xp: { name: "Default", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #5cb742 !important;border: 2px solid #50962d !important}#chat_log {background-color: rgb(57 120 13 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #589a2a !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/wallpaper-xp.jpg");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/taskbar-xp.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/tray_left-xp.png"), url("./img/desktop/__Themes/XP/tray-xp.png")}#chat_send{background:url("./img/desktop/__Themes/XP/start-xp.png")}'); var winxp_tada = new Audio("./sfx/ui/winxp/tada.mp3"); winxp_tada.play(); } },
+                        space: { name: "Space", callback: function () { theme('#chat_log_list::-webkit-scrollbar-thumb {background-color: #5988b6 !important;border: 2px solid #4470ad !important}#chat_log {background-color: rgb(13 73 120 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #33578d !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Space/wallpaper-space.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Space/taskbar-space.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Space/tray_left-space.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Space/tray-space.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Space/start-space.png")}'); } },
+                        aquarium: { name: "Aquarium", callback: function () { theme('#chat_log_list::-webkit-scrollbar-thumb {background-color: #59b6af !important;border: 2px solid #44a2ad !important}#chat_log {background-color: rgb(13 120 83 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #389295 !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/wallpaper-aquarium.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/taskbar-aquarium.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/tray_left-aquarium.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/tray-aquarium.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Aquarium/start-aquarium.png")}'); } },
+                        nature: { name: "Nature", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #4ac244 !important;border: 2px solid #42ac3e !important}#chat_log {background-color: rgb(68 196 43 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #6bd756 !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/wallpaper-nature.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/taskbar-nature.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/tray_left-nature.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/tray-nature.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Nature/start-nature.png")}'); } },
+                        davinci: { name: "Da Vinci", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #6d5335 !important;border: 2px solid #774d28 !important}#chat_log {background-color: rgb(119 70 25 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #b57942 !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/wallpaper-davinci.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/taskbar-davinci.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/tray_left-davinci.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/tray-davinci.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Da Vinci/start-davinci.png")}'); } },
+                        zune: { name: "Zune", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #6d5335 !important;border: 2px solid #774d28 !important}#chat_log {background-color: rgb(119 70 25 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #b57942 !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/wallpaper-zune.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/taskbar-zune.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/tray_left-zune.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/tray-zune.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Zune/start-zune.png")}'); } },
+                        embedded: { name: "Embedded POS Ready", callback: function () { theme('#chat_log_list::-webkit-scrollbar-thumb {background-color: #5988b6 !important;border: 2px solid #4470ad !important}#chat_log {background-color: rgb(41 62 87 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #275f6b !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/wallpaper-embed.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/taskbar-embed.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/tray_left-embed.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/tray-embed.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Embedded/start-embed.png")}'); } },
+                        royale: { name: "Royale", callback: function () { theme('::selection {background: #3279b38c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #5cb742 !important;border: 2px solid #50962d !important}#chat_log {background-color: rgb(57 120 13 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #589a2a !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Royale/wallpaper-royale.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale/taskbar-royale.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/royale/tray_left-royale.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Royale/tray-royale.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale/start-royale.png")}'); } },
+                        royale_noir: { name: "Royale Noir", callback: function () { theme('#chat_log_list::-webkit-scrollbar-thumb {background-color: #5988b6 !important;border: 2px solid #4470ad !important}#chat_log {background-color: rgb(41 62 87 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #275f6b !important}#content{background:url("./img/desktop/logo.backup.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/wallpaper-royalenoir.png");background-repeat: no-repeat; background-position: top left, center; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/taskbar-royalenoir.png")}#chat_tray{background-image:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/tray_left-royalenoir.png"), url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/tray-royalenoir.png")}#chat_send{background:url("./img/desktop/__Themes/XP/__Sub-Themes/Royale_Noir/start-royalenoir.png")}'); } }
+                    }
+                },
+                aero: { name: "Aero", callback: function () { theme('::selection {background: #7070708c !important}#chat_log_list::-webkit-scrollbar-thumb {background-color: #598bb6 !important;border: 2px solid #446ead !important}button:not(:disabled):hover  {box-shadow: none !important}button.focused, button:focus  {box-shadow: none !important}#chat_log {background-color: rgb(13 51 120 / 45%) !important}#chat_log #chat_log_header {border-bottom: 1px solid #469bca !important}#content{background:url("./img/desktop/logo.png"), url("./img/desktop/__Themes/Aero/wallpaper-aero.jpg");background-position: top left, center; background-repeat: no-repeat; background-size: auto, cover;}#chat_bar{background:url("./img/desktop/__Themes/Aero/taskbar-aero.png")}#chat_tray{background-image:url("./img/desktop/__Themes/Aero/tray_left-aero.png"), url("./img/desktop/__Themes/Aero/tray-aero.png")}#btn_tile{background-image:url("./img/desktop/__Themes/Aero/tile-aero.png")}#chat_send{background:url("./img/desktop/__Themes/Aero/start-aero.png")}.bubble-content.page.message_cont::-webkit-scrollbar{width:16px}.bubble-content.page.message_cont::-webkit-scrollbar:horizontal{height:17px}.bubble-content.page.message_cont::-webkit-scrollbar-corner{background:#eee}.bubble-content.page.message_cont::-webkit-scrollbar-track:vertical{background:linear-gradient(90deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-track:horizontal{background:linear-gradient(180deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-thumb{background-color:#eee;border:1.5px solid #888;border-radius:3px;box-shadow:inset 0 -1px 1px hsla(0,0%,100%,0.8),inset 0 1px 1px #fff}.bubble-content.page.message_cont::-webkit-scrollbar-thumb:vertical{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAIAAADpZ+PpAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAADrSURBVChTTc5LboJQGAXguyoCu4ERCzAGlRk7UOwGWIDh0s4M4kxb06RSq/jAB6AxJkJ4lTDrue3AnvyzP+fLId+/yfM8juP7PQmCCOf7B3e+ZD+O40RRVFW12VQUpd3r9U3T2m4OpKoqWZYNwzBZLEqfh0N7NnvfrPcEWlEUWZb9mWF4Ph6D0ylcLbfM5HkeJrhGA2hb15/QXnv+w7RYXsDatjOdvnmrHSnLEizMNE2v11sUXQBCnn98kbquBUGQJAlmq9WB2e3qg4HJdqKkaRql1HGc0WgMcDJ5dd0F24kediZJ8t/ELT69H+8py0CYSIO5AAAAAElFTkSuQmCC) no-repeat 50%,linear-gradient(90deg,#eee 45%,#ddd 0,#bbb)}.bubble-content.page.message_cont::-webkit-scrollbar-thumb:horizontal{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAJCAYAAAALpr0TAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAADcSURBVChTNZBLqoUwEEQrURQUxZGCvy24ACfiityJi7tv8GauQoPxk5tquA2RQ9vVVYk6z9NZaxFFEe77htYazjk8z4MwDIVZ+rourOuKaZrwvi+WZcE8z1BKCbPPCjk4DAO2bRP1OI7wLiL6Mbd7J408z1GWpQwWRYGqqiQG+03TgMu0MacfUN4qANmn8UOv9MjW3sKaSm7iIdOSlziOQ3LScd93aPonSYK6riVLlmVo21aYfVqzND9pmqLrOlGT+76XbcxLZkb19/l3fEP+oF0cx8KMEASBsDEGX2/CgZCHkg+8AAAAAElFTkSuQmCC) no-repeat 50%,linear-gradient(180deg,#eee 45%,#ddd 0,#bbb)}.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal:end:increment,.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal:start:decrement,.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical:end:increment,.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical:start:decrement{display:block}.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical{height:17px}.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical:start{background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik04IDZIN3YxSDZ2MUg1djFINHYxaDdWOWgtMVY4SDlWN0g4VjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(90deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-button:vertical:end{background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0xMSA2SDR2MWgxdjFoMXYxaDF2MWgxVjloMVY4aDFWN2gxVjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(90deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal{width:16px}.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal:start{background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIxMDAlIiB4Mj0iMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik05IDRIOHYxSDd2MUg2djFINXYxaDF2MWgxdjFoMXYxaDFWNFoiIGZpbGw9InVybCgjYSkiLz48L3N2Zz4=),linear-gradient(180deg,#e5e5e5,#f0f0f0 20%)}.bubble-content.page.message_cont::-webkit-scrollbar-button:horizontal:end{background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIxMDAlIiB4Mj0iMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik03IDRINnY3aDF2LTFoMVY5aDFWOGgxVjdIOVY2SDhWNUg3VjRaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(180deg,#e5e5e5,#f0f0f0 20%)}.bubble{padding:0;width:197px;background:linear-gradient(180deg,#fff,#ddd);border:1px solid rgba(0,0,0,0.4);border-radius:3px;box-shadow:5px 5px 3px -3px rgba(0,0,0,0.4);position:absolute}.bubble-left{right:-45px;top:40px}.bubble-left::after{background-image:url("./img/desktop/__Themes/Aero/bubble/bubble_tail_l.png");width:22px;height:14px;top:12px;right:-22px}.bubble-right{top:40px;left:155px}.bubble-right::after{background-image:url("./img/desktop/__Themes/Aero/bubble/bubble_tail_r.png");width:22px;height:14px;top:12px;left:-22px}.bubble-bottom{top:156px}.bubble-bottom::after{background-image:url("./img/desktop/__Themes/Aero/bubble/bubble_tail_b.png");width:28px;height:22px;top:-22px;left:26px}.bubble-top{bottom:4px}.bubble-top::after{background-image:url("./img/desktop/__Themes/Aero/bubble/bubble_tail_t.png");width:28px;height:22px;left:110px}.bonzi_name{border:1px solid rgba(0,0,0,0.4);background:linear-gradient(180deg,#fff,#ddd);box-shadow:5px 5px 3px -3px rgba(0,0,0,0.4);color:#000}.bonzi_user{border:1px solid rgba(0,0,0,0.4);background:linear-gradient(180deg,#fff,#ddd);box-shadow:5px 5px 3px -3px rgba(0,0,0,0.4);color:#000}.btn{margin-right:10px;border-radius:3px;border:1px solid #ddd;padding:3px 15px;background:#f2f2f2;background:-moz-linear-gradient(top,#f2f2f2 0%,#ebebeb 42%,#ddd 47%,#cfcfcf 100%);background:-webkit-linear-gradient(top,#f2f2f2 0%,#ebebeb 42%,#ddd 47%,#cfcfcf 100%);background:linear-gradient(to bottom,#f2f2f2 0%,#ebebeb 42%,#ddd 47%,#cfcfcf 100%);filter:progid: DXImageTransform.Microsoft.gradient(startColorstr="#f2f2f2",endColorstr="#cfcfcf",GradientType=0);transition:all .1s ease-in;border:1px solid #707070}.btn:hover,.btn:focus{outline:0;background:#eaf6fd;background:-moz-linear-gradient(top,#eaf6fd 0%,#d9f0fc 42%,#bee6fd 47%,#bce5fc 58%,#a7d9f5 100%);background:-webkit-linear-gradient(top,#eaf6fd 0%,#d9f0fc 42%,#bee6fd 47%,#bce5fc 58%,#a7d9f5 100%);background:linear-gradient(to bottom,#eaf6fd 0%,#d9f0fc 42%,#bee6fd 47%,#bce5fc 58%,#a7d9f5 100%);filter:progid: DXImageTransform.Microsoft.gradient(startColorstr="#eaf6fd",endColorstr="#a7d9f5",GradientType=0);border:1px solid #3C7FB1;box-shadow:0 0 3px #A7D9F5;-o-box-shadow:0 0 3px #A7D9F5;-webkit-box-shadow:0 0 3px #A7D9F5;-moz-box-shadow:0 0 3px #A7D9F5}.btn:active{box-shadow:inset 0 -1px 6px rgba(0,0,0,0.2),inset 0 -.7em #BEE6FD,0 0 3px #A7D9F5;-o-box-shadow:inset 0 -1px 6px rgba(0,0,0,0.2),inset 0 -.7em #BEE6FD,0 0 3px #A7D9F5;-webkit-box-shadow:inset 0 -1px 6px rgba(0,0,0,0.2),inset 0 -.7em #BEE6FD,0 0 3px #A7D9F5;-moz-box-shadow:inset 0 -1px 6px rgba(0,0,0,0.2),inset 0 -.7em #BEE6FD,0 0 3px #A7D9F5}.context-menu-root{background:linear-gradient(#fff 20%,#f1f4fa 25%,#f1f4fa 43%,#d4dbee 48%,#e6eaf6);border-radius:5px;border:4px solid transparent}.context-menu-icon.context-menu-hover:before{color:#fff}.context-menu-icon.context-menu-disabled::before{color:#8c8c8c}.context-menu-icon.context-menu-icon--fa{display:list-item}.context-menu-icon.context-menu-icon--fa.context-menu-hover:before{color:#fff}.context-menu-icon.context-menu-icon--fa.context-menu-disabled::before{color:#8c8c8c}.context-menu-list{backdrop-filter:blur(7px) brightness(1.25);background:linear-gradient(#fff 20%,#f1f4fa 25%,#f1f4fa 43%,#d4dbee 48%,#e6eaf6);border:4px solid transparent;border-radius:5px;box-shadow:inset 1px 0 rgba(0,0,0,0.15),inset -1px 0 #fff;font-family:Segoe UI,sans-serif;font-size:11px;display:inline-block;list-style-type:none;margin:0;max-width:none;min-width:none;position:absolute}.context-menu-item{border:1px solid transparent;background-color:linear-gradient(#fff 20%,#f1f4fa 25%,#f1f4fa 43%,#d4dbee 48%,#e6eaf6);color:#000;padding:5px 22px;position:relative;user-select:none}.context-menu-item:hover{border-radius:3px;backdrop-filter:blur(7px) brightness(1.25);opacity:87%;border:1px solid rgba(0,0,0,0.4);background:linear-gradient(180deg,hsla(0,0%,100%,0.5),rgba(184,214,251,0.5) 60%,rgba(184,214,251,0.5) 90%,hsla(0,0%,100%,0.8));border-color:#b8d6fb}.context-menu-separator{background:linear-gradient(#fff 20%,#f1f4fa 25%,#f1f4fa 43%,#d4dbee 48%,#e6eaf6);border-bottom:1px solid #aca899;margin:1px 2.5px;padding:0}.context-menu-item > label > input,.context-menu-item > label > textarea{user-select:text}.context-menu-item.context-menu-hover{background-color:#8931c4;color:#fff;cursor:pointer}.context-menu-item.context-menu-disabled{background-color:#fff;color:#8c8c8c;cursor:default}.context-menu-input.context-menu-hover{background-color:#eee;cursor:default}.context-menu-submenu:after{content:"";border-style:solid;border-width:.25em 0 .25em .25em;border-color:transparent transparent transparent #000;height:0;position:absolute;right:.5em;top:50%;transform:translateY(-50%);width:0;z-index:1}.context-menu-item.context-menu-input{padding:.3em .6em}.context-menu-input > label > *{vertical-align:top}.context-menu-input > label > input[type="checkbox"],.context-menu-input > label > input[type="radio"]{margin-right:.4em;position:relative;top:.12em}.context-menu-input > label{margin:0}.context-menu-input > label,.context-menu-input > label > input[type="text"],.context-menu-input > label > textarea,.context-menu-input > label > select{box-sizing:border-box;display:block;width:100%}.context-menu-input > label > textarea{height:7em}.context-menu-item > .context-menu-list{display:none;border:1.5px solid #888;border-radius:3px;right:-.3em;top:.3em}.context-menu-item.context-menu-visible > .context-menu-list{display:block}.context-menu-accesskey{text-decoration:underline}select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0xMSA2SDR2MWgxdjFoMXYxaDF2MWgxVjloMVY4aDFWN2gxVjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(180deg,#eee 45%,#ddd 0,#bbb);background-position:100%;background-repeat:no-repeat;border:1.5px solid #888;border-radius:3px;box-shadow:inset 0 -1px 1px hsla(0,0%,100%,0.8),inset 0 1px 1px #fff;box-sizing:border-box;font:9pt Segoe UI,sans-serif;padding:2px 30px 2px 3px;position:relative}select:hover{background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0xMSA2SDR2MWgxdjFoMXYxaDF2MWgxVjloMVY4aDFWN2gxVjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(180deg,#e5f4fd 45%,#b3e0f9 0);border-color:#72a2c5}select:focus{background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzMzMztzdG9wLW9wYWNpdHk6MSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2FhYTtzdG9wLW9wYWNpdHk6MSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0xMSA2SDR2MWgxdjFoMXYxaDF2MWgxVjloMVY4aDFWN2gxVjZaIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+),linear-gradient(180deg,#cee9f8 45%,#86c6e8 0);border-color:#6d91ab;box-shadow:unset;outline:none}.xp_bubble,.bubble{background:linear-gradient(180deg,#fff,#ddd);color:#000;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;box-shadow:5px 5px 3px -3px rgba(0,0,0,0.4);border:1px solid rgba(0,0,0,0.4)}#skid_cont,#ban_cont,#kick_cont,.message_cont,.message_cont_arcade,#aboutme_cont,#unsupp_cont,#error_cont,#b_alert,.xp_dialog{background:rgba(#fff,#fff,#fff,0.9);-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;color:#d6e6ff;opacity:97%;backdrop-filter:blur(6px) brightness(1.25)}.xp_dialog,.message_cont,.message_cont_arcade,.message_cont_pinball,.message_cont_solitaire{border:1px solid rgba(0,0,0,0.725);outline:5px;background:rgba(#fff,#fff,#fff,0.9);background-color:rgba(#fff,#fff,#fff,0.9);-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;color:#d6e6ff;opacity:97%;backdrop-filter:blur(6px) brightness(1.25);box-shadow:0 0 0 1px rgba(255,255,255,0.5) inset,0 0 10px rgba(0,0,0,0.75);background-blend-mode:overlay;background-attachment:fixed;background-repeat:no-repeat;transform:translateZ(0x);background-size:100vw 100vh;transition:background-color 125ms ease-in-out;will-change:backdrop-filter,background-color}#page_warning_login,#page_reboot,#page_error,#page_ban,#page_skiddie,#page_unsupp,#page_arcade_menu,#page_aboutme,#page_pinball,#page_solitaire,.message_cont,.message_cont_arcade{background-color:rgba(0,0,0,0.5)}'); var win7_startup = new Audio("./sfx/ui/win7/startup.mp3"); win7_startup.play(); } }
+            }
+        }),
+        $("#dm_input").keypress(n => {
+            if (n.which == 13)
+                dm_send();
+        });
 }
 function dm_send() {
 	if (!$("#dm_input").val()) {
 		$("#page_dm").hide()
 		return
 	}
-	socket.emit("command", {
-		list: ["dm2", {
-			target: $("#dm_guid").val(),
-			text: $("#dm_input").val()
-		}]
-	})
+	socket.emit("command", {list: ["dm2", {target: $("#dm_guid").val(), text: $("#dm_input").val()}]})
 	$("#dm_input").val("")
 	$("#page_dm").hide()
 	$("#chat_message").focus()
@@ -2090,20 +2032,20 @@ $(document).mouseup(function() {
 
 // chat logger handler (ported to bwe)
 let maximized = 0;
-$(document).ready(function () {
-    $("#chat_log_controls").on("click", function () {
+$(document).ready(() => {
+    $("#chat_log_controls").on("click", () => {
         maximized = maximized ? 0 : 1;
         $(".chat-log").toggleClass("minimized maximized");
-		if(maximized != 1) {
-			$("#room_info").addClass("log-minimized");$("#arcade_btn").addClass("log-minimized");$("#themes_btn").addClass("log-minimized");$("#room_info").removeClass("log-maximized");$("#arcade_btn").removeClass("log-maximized");$("#themes_btn").removeClass("log-maximized");
-		} else {
-			$("#room_info").removeClass("log-minimized");$("#arcade_btn").removeClass("log-minimized");$("#themes_btn").removeClass("log-minimized");$("#room_info").addClass("log-maximized");$("#arcade_btn").addClass("log-maximized");$("#themes_btn").addClass("log-maximized");
-		}
-		if(maximized != 1) {
-			$("#chat_log_list").addClass("hidden");$("#chat_log_list").removeClass("visible");
-		} else {
-			$("#chat_log_list").addClass("visible");$("#chat_log_list").removeClass("hidden");
-		}
+        if (maximized != 1) {
+            $("#room_info").addClass("log-minimized"); $("#arcade_btn").addClass("log-minimized"); $("#themes_btn").addClass("log-minimized"); $("#room_info").removeClass("log-maximized"); $("#arcade_btn").removeClass("log-maximized"); $("#themes_btn").removeClass("log-maximized");
+        } else {
+            $("#room_info").removeClass("log-minimized"); $("#arcade_btn").removeClass("log-minimized"); $("#themes_btn").removeClass("log-minimized"); $("#room_info").addClass("log-maximized"); $("#arcade_btn").addClass("log-maximized"); $("#themes_btn").addClass("log-maximized");
+        }
+        if (maximized != 1) {
+            $("#chat_log_list").addClass("hidden"); $("#chat_log_list").removeClass("visible");
+        } else {
+            $("#chat_log_list").addClass("visible"); $("#chat_log_list").removeClass("hidden");
+        }
     });
 });
 
@@ -2116,8 +2058,8 @@ function setCookie(cname, cvalue, exdays) {
   const date = new Date();
   if(exdays == undefined || "" || 0 || false) {exdays = 365}
   date.setTime(date.getTime() + (exdays * 24 * 60 * 60 * 1000));
-  let expires = "expires="+date.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  let expires = `expires=${date.toUTCString()}`;
+  document.cookie = `${cname}=${cvalue};${expires};path=/`;
 }
 
 function getCookie(cname) {
@@ -2148,6 +2090,6 @@ const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
 const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
 const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
 
-$("#debug-device-stats").html("<span>"+vendor+"<br>"+renderer+"<br>"+navigator.platform+"<br>"+navigator.userAgent+"<br>"+navigator.language+"<br>"+navigator.connection.effectiveType+"<br>"+"</span>");
+$("#debug-device-stats").html(`<span>${vendor}<br>${renderer}<br>${navigator.platform}<br>${navigator.userAgent}<br>${navigator.language}<br>${navigator.connection.effectiveType}<br></span>`);
 
 //# sourceMappingURL=app.js.map
