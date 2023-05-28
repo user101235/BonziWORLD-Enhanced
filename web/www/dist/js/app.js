@@ -1502,7 +1502,7 @@ function bzSetup() {
             13 == e.which && sendInput();
         }),
 		socket.on("room", function (data) {
-            var sfx = new Audio("./sfx/startup.mp3");
+            var sfx = new Audio("./sfx/ui/winxp/startup.mp3");
             sfx.play();
 			$("#room_owner")[data.isOwner ? "show" : "hide"](),
 			$("#room_public")[data.isPublic ? "show" : "hide"](),
