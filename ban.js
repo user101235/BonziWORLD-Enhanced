@@ -33,8 +33,6 @@ return string
     .replaceAll("~", " ");
 }
 
-exports.rooms = rooms;
-exports.rooms_table = rooms_table;
 exports.init = function() {
     fs.writeFile(__dirname + "/json/bans.json", "{}", { flag: 'wx' }, function(err) {
         if (!err) console.log("Created empty bans list.");
