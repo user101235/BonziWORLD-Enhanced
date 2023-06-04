@@ -1,5 +1,5 @@
 $(document).ready(() => {
-	if (window.location.pathname == "/") {
+	if (window.location.pathname == "/" || "/index.html" || "/index.htm") {
 		$.getJSON("./dist/json/version.json", (result) => {
 			$.each(result, function (i, field) {
 				$("#login_version").text(`Version ${field}`);
