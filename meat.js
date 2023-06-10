@@ -123,7 +123,6 @@ var stickers = {
     kiddie: "kiddie",
     big_bonzi: "you picked the wrong room id fool!",
     lol: "lol",
-    flip: "fuck you",
     sans: "fuck you",
     crybaby: "crybaby",
 };
